@@ -1,0 +1,73 @@
+<form class="mat-form" novalidate [formGroup]="cardForm" (submit)="onSubmit()">
+
+  <div formGroupName="name" class="name">
+    <mat-form-field>
+      <input matInput placeholder="First name" formControlName="firstName">
+      <mat-error *ngIf="firstName.invalid || firstName.touched">You must enter a value</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Last name" formControlName="lastName">
+      <mat-error *ngIf="lastName.invalid">You must enter a value</mat-error>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <input matInput placeholder="Email" formControlName="email">
+    <mat-error *ngIf="email.invalid">{{getErrorMessageEmail()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Phone" formControlName="phone">
+    <mat-error *ngIf="lastName.invalid">{{getErrorMessagePhone()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Nickname" formControlName="nickname">
+    <mat-error *ngIf="nickname.invalid">{{getErrorMessageNickname()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="dp" placeholder="Birthday" formControlName="birthday" name="birthday">
+    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp></mat-datepicker>
+    <mat-error *ngIf="birthday.invalid || birthday.pristine">You must enter a value</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Sex" formControlName="sex">
+      <mat-option value="Male">Male</mat-option>
+      <mat-option value="Female">Female</mat-option>
+    </mat-select>
+    <mat-error *ngIf="sex.invalid">You must enter a value</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput placeholder="Notes" formControlName="note"></textarea>
+    <mat-error *ngIf="note.invalid">Not a valid. Min length must be 50 symbols!</mat-error>
+  </mat-form-field>
+
+  <div class="mat-form-buttons">
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+    <button mat-raised-button (click)="clearForm()">Clear</button>
+  </div>
+
+
+</form>
+
+<mat-card *ngIf="isValid" class="mat-card">
+  <mat-card-header>
+    <mat-card-title>
+      <p>First name: {{cardForm.value.name.firstName}}</p>
+      <p>Last name:  {{cardForm.value.name.lastName}}</p>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>Email: {{cardForm.value.email}}</p>
+    <p>Phone: {{cardForm.value.phone}}</p>
+    <p>Nickname: {{cardForm.value.nickname}}</p>
+    <p>Birthday: {{cardForm.value.birthday}}</p>
+    <p>Sex: {{cardForm.value.sex}}</p>
+    <p *ngIf="note.value.length > 0">Note: {{cardForm.value.note}}</p>
+  </mat-card-content>
+</mat-card>

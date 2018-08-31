@@ -1,0 +1,22 @@
+.mat-form {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 50%;
+}
+.name {
+  display: flex;
+  flex-direction: column;
+}
+.mat-form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+.mat-card {
+  max-width: 410px;
+  margin: auto;
+  margin-top: 16px;
+}
+.mat-card p {
+  margin-bottom: 5px;
+}
