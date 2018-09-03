@@ -1,8 +1,11 @@
+mat-card {
+  max-width: 800px;
+  margin: auto;
+  margin-top: 16px;
+}
 .mat-form {
   display: flex;
   flex-direction: column;
-  margin: auto;
-  width: 50%;
 }
 .name {
   display: flex;
@@ -12,11 +15,17 @@
   display: flex;
   justify-content: space-between;
 }
-.mat-card {
+.mat-card-answer {
   max-width: 410px;
   margin: auto;
   margin-top: 16px;
 }
 .mat-card p {
   margin-bottom: 5px;
+}
+.mat-card-header td {
+  width: 71px;
+}
+.mat-card-content td {
+  width: 79px;
 }

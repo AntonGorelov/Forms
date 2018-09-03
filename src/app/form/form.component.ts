@@ -32,14 +32,6 @@ export const MY_FORMATS = {
 export class FormComponent implements OnInit {
 
   public cardForm: FormGroup;
-  public firstName: FormControl;
-  public lastName: FormControl;
-  public email: FormControl;
-  public phone: FormControl;
-  public nickname: FormControl;
-  public birthday: FormControl;
-  public sex: FormControl;
-  public note: FormControl;
 
   public emailRegex =
     '^[-a-z0-9!#$%&\'*+/=?^_`{|}~]+(?:\\.[-a-z0-9!#$%&\'*+/=?^_`{|}~]+)*@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\\.)*(?:com|ru)$';
@@ -50,55 +42,71 @@ export class FormComponent implements OnInit {
   constructor() {}
 
   public ngOnInit() {
-    this.createFormControls();
     this.createNewForm();
-  }
-
-  public createFormControls() {
-    this.firstName = new FormControl('', Validators.required);
-    this.lastName = new FormControl('', Validators.required);
-    this.email = new FormControl('', [Validators.required, Validators.email, Validators.pattern(this.emailRegex)]);
-    this.phone = new FormControl('', [Validators.required, Validators.pattern(this.phoneRegex)]);
-    this.nickname = new FormControl('', [Validators.required, Validators.minLength(8)]);
-    this.birthday = new FormControl('', Validators.required);
-    this.sex = new FormControl('', Validators.required);
-    this.note = new FormControl('', Validators.minLength(50));
   }
 
   public createNewForm() {
     this.cardForm = new FormGroup({
       name: new FormGroup({
-        firstName: this.firstName,
-        lastName: this.lastName
+        firstName: new FormControl('', Validators.required),
+        lastName:  new FormControl('', Validators.required)
       }),
-      email:    this.email,
-      phone:    this.phone,
-      nickname: this.nickname,
-      birthday: this.birthday,
-      sex:      this.sex,
-      note:     this.note
+      email:    new FormControl('', [Validators.required, Validators.email, Validators.pattern(this.emailRegex)]),
+      phone:    new FormControl('', [Validators.required, Validators.pattern(this.phoneRegex)]),
+      nickname: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      birthday: new FormControl('', Validators.required),
+      sex:      new FormControl('', Validators.required),
+      note:     new FormControl('', Validators.minLength(50))
     });
   }
 
-  public getErrorMessageEmail() {
-    if (this.email.hasError('required')) { return 'You must enter a value'; }
-    if (this.email.hasError('email')) { return 'Not a valid email. Email must be contains @!'; }
-    if (this.email.hasError('pattern')) { return 'Not a valid email. Email must be contains .com or .ru domains!'; }
+  get fNameControl() {
+    return this.cardForm.get('name.firstName');
+  }
 
-    // return this.email.hasError('required') ? 'You must enter a value' :
-    //   this.email.hasError('email') ? 'Not a valid email. Email must be contains @!' :
-    //     '';
+  get lNameControl() {
+    return this.cardForm.get('name.lastName');
+  }
+
+  get emailControl() {
+    return this.cardForm.get('email');
+  }
+
+  get phoneControl() {
+    return this.cardForm.get('phone');
+  }
+
+  get nicknameControl() {
+    return this.cardForm.get('nickname');
+  }
+
+  get birthdayControl() {
+    return this.cardForm.get('birthday');
+  }
+
+  get sexControl() {
+    return this.cardForm.get('sex');
+  }
+
+  get noteControl() {
+    return this.cardForm.get('note');
+  }
+
+  public getErrorMessageEmail() {
+    if (this.emailControl.hasError('required')) { return 'You must enter a value'; }
+    if (this.emailControl.hasError('email')) { return 'Not a valid email. Email must be contains @!'; }
+    if (this.emailControl.hasError('pattern')) { return 'Not a valid email. Email must be contains .com or .ru domains!'; }
   }
 
   public getErrorMessagePhone() {
-    return this.phone.hasError('required') ? 'You must enter a value' :
-      this.phone.hasError('pattern') ? 'Not a valid phone. Input your russian number, please!' :
+    return this.phoneControl.hasError('required') ? 'You must enter a value' :
+      this.phoneControl.hasError('pattern') ? 'Not a valid phone. Input your russian number, please!' :
         '';
   }
 
   public getErrorMessageNickname() {
-    return this.nickname.hasError('required') ? 'You must enter a value' :
-      this.nickname.hasError('minLength') ? '' :
+    return this.nicknameControl.hasError('required') ? 'You must enter a value' :
+      this.nicknameControl.hasError('minLength') ? '' :
         'Not a valid nickname. Min length must be 8 symbols! ';
   }
 
