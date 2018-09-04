@@ -1,42 +1,143 @@
-<div class="form">
-  <div class="container">
-    <form>
-      <div class="form-group">
-        <label for="fname">First name</label>
-        <input type="text" class="form-control" id="fname" placeholder="Enter first name">
+<div class="form-container">
+
+  <div class="card">
+    <div class="card-body">
+      <div class="form card-text">
+
+
+        <div class="container">
+
+          <form novalidate [formGroup]="cardForm" (submit)="onSubmit()">
+            <div class="form-group" formGroupName="name"
+                 [ngClass]="{ 'has-error': fNameControl.invalid && fNameControl.dirty, 'has-success': fNameControl.valid }">
+              <label for="fname">First name</label>
+              <input type="text" class="form-control" id="fname" placeholder="Enter first name" formControlName="firstName">
+            </div>
+            <div class="alert alert-danger" *ngIf="fNameControl.invalid && fNameControl.touched">
+              Input first name, please!
+            </div>
+
+            <div class="form-group" formGroupName="name">
+              <label for="lname">Last name</label>
+              <input type="text" class="form-control" id="lname" placeholder="Enter last name" formControlName="lastName">
+            </div>
+            <div class="alert alert-danger" *ngIf="lNameControl.invalid && lNameControl.touched">
+              Input last name, please!
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter email" formControlName="email">
+            </div>
+            <div class="alert alert-danger" *ngIf="emailControl.invalid && emailControl.touched">
+              {{getErrorMessageEmail()}}
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="text" class="form-control" id="phone" placeholder="Enter phone" formControlName="phone">
+            </div>
+            <div class="alert alert-danger" *ngIf="phoneControl.invalid && phoneControl.touched">
+              {{getErrorMessagePhone()}}
+            </div>
+
+            <div class="form-group">
+              <label for="nickname">Nickname</label>
+              <input type="text" class="form-control" id="nickname" placeholder="Enter nickname" formControlName="nickname">
+            </div>
+            <div class="alert alert-danger" *ngIf="nicknameControl.invalid && nicknameControl.touched">
+              {{getErrorMessageNickname()}}
+            </div>
+
+            <div class="form-group">
+              <label for="birthday">Birthday</label>
+              <!--<input type="text" class="form-control" id="birthday" placeholder="Enter birthday">-->
+              <input type="text" placeholder="Enter birthday" id="birthday" class="form-control" bsDatepicker formControlName="birthday">
+            </div>
+            <div class="alert alert-danger" *ngIf="birthdayControl.invalid && birthdayControl.touched">
+              Input birthday, please!
+            </div>
+
+            <div class="form-group">
+              <label for="sex">Sex</label>
+              <div class="input-group mb-3">
+                <select class="custom-select" id="sex" formControlName="sex">
+                  <option value="">Choose a sex</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+
+            </div>
+            <div class="alert alert-danger" *ngIf="sexControl.invalid && sexControl.touched">
+              Input sex, please!
+            </div>
+
+            <div class="form-group">
+              <label for="note">Note</label>
+              <input type="text" class="form-control" id="note" placeholder="Note" formControlName="note">
+            </div>
+            <div class="alert alert-danger" *ngIf="noteControl.invalid && noteControl.touched">
+              Not a valid. Min length must be 50 symbols!
+            </div>
+
+            <div class="form-btns">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="reset" class="btn btn-primary">Clear</button>
+            </div>
+          </form>
+
+        </div>
+
+
       </div>
-      <div class="form-group">
-        <label for="lname">Last name</label>
-        <input type="text" class="form-control" id="lname" placeholder="Enter last name">
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" placeholder="Enter email">
-      </div>
-      <div class="form-group">
-        <label for="phone">Phone</label>
-        <input type="text" class="form-control" id="phone" placeholder="Enter phone">
-      </div>
-      <div class="form-group">
-        <label for="nickname">Nickname</label>
-        <input type="text" class="form-control" id="nickname" placeholder="Enter nickname">
-      </div>
-      <div class="form-group">
-        <label for="birthday">Birthday</label>
-        <input type="text" class="form-control" id="birthday" placeholder="Enter birthday">
-      </div>
-      <div class="form-group">
-        <label for="sex">Sex</label>
-        <input type="text" class="form-control" id="sex" placeholder="Enter sex">
-      </div>
-      <div class="form-group">
-        <label for="note">Note</label>
-        <input type="text" class="form-control" id="note" placeholder="Note">
-      </div>
-      <div class="form-btns">
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="reset" class="btn btn-primary">Clear</button>
-      </div>
-    </form>
+    </div>
   </div>
+
 </div>
+
+<div class="card-answer-container" *ngIf="isValid">
+
+  <div class="card bg-light mb-3 card-answer">
+    <div class="card-header">Valid form</div>
+    <div class="card-body">
+      <table>
+        <tr>
+          <td>First name:</td>
+          <td>{{fNameControl.value}}</td>
+        </tr>
+        <tr>
+          <td>Last name:</td>
+          <td>{{lNameControl.value}}</td>
+        </tr>
+        <tr>
+          <td>Email:</td>
+          <td>{{emailControl.value}}</td>
+        </tr>
+        <tr>
+          <td>Phone:</td>
+          <td>{{phoneControl.value}}</td>
+        </tr>
+        <tr>
+          <td>Nickname:</td>
+          <td>{{nicknameControl.value}}</td>
+        </tr>
+        <tr>
+          <td>Birthday:</td>
+          <td>{{birthdayControl.value}}</td>
+        </tr>
+        <tr>
+          <td>Sex:</td>
+          <td>{{sexControl.value}}</td>
+        </tr>
+        <tr *ngIf="noteControl.value">
+          <td>Note:</td>
+          <td>{{noteControl.value}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+

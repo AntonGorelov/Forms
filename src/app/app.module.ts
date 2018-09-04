@@ -13,6 +13,8 @@ import { AppRoutingModule } from './app.routing.module';
 
 import { FormService } from './form.service';
 
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { FormService } from './form.service';
     ReactiveFormsModule,
     MatTabsModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    BsDatepickerModule.forRoot()
   ],
   providers: [FormService],
   bootstrap: [AppComponent]
