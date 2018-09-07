@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
-import { FormService } from '../form.service';
-
+import { FormArray, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
+
+import { FormService } from '../../services';
 
 const moment = _moment;
 
@@ -32,7 +35,14 @@ export const MY_FORMATS = {
 
 export class FormComponent implements OnInit {
 
-  public isValid = false;
+  public hobbies = [];
+
+  public selectable = true;
+  public removable = true;
+  public addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+
+  matcher = new ErrorStateMatcher();
 
   constructor(public formService: FormService) {}
 
@@ -72,6 +82,14 @@ export class FormComponent implements OnInit {
     return this.cardForm.get('birthday');
   }
 
+  get hobbyControl() {
+    return this.cardForm.get('hobbyVal.hobbyFormControl');
+  }
+
+  get hobbyArray() {
+    return this.cardForm.get('hobbyVal.hobbyFormArray');
+  }
+
   get sexControl() {
     return this.cardForm.get('sex');
   }
@@ -92,14 +110,47 @@ export class FormComponent implements OnInit {
     return this.formService.getErrorMessageNickname();
   }
 
+  public getErrorMessageHobby() {
+    return this.formService.getErrorMessageHobby();
+  }
+
   public onSubmit() {
-    return this.formService.onSubmit();
+    this.formService.onSubmit();
+    console.log(this.cardForm);
   }
 
   public clearForm() {
     return this.formService.clearForm();
   }
 
-  // Chips
+  // <--------------- Chips --------------->
+
+  public temp(value) {
+    return new FormControl(value, Validators.minLength(7));
+  }
+
+  public addHobby(event: MatChipInputEvent) {
+    const input = event.input;
+    const value = event.value;
+    if ((value || '').trim()) {
+      (<FormArray>this.cardForm.get('hobbyVal')).value.hobbyArray.push(this.temp(event.value));
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  public valuesHobby() {
+    this.hobbies = [];
+
+    for (let i = 0; i < this.cardForm.get('hobbyVal').value.hobbyArray.length; i++) {
+      this.hobbies.push(this.cardForm.get('hobbyVal').value.hobbyArray[i].value);
+    }
+  }
+
+  public removeHobby(i: number) {
+    (<FormArray>this.cardForm.get('hobbyVal')).value.hobbyArray.splice(i, 1);
+    this.hobbies.splice(i, 1);
+  }
 
 }

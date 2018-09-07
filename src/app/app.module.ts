@@ -1,26 +1,28 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
+// Material Modules
 import { MaterialModule } from './material.module';
 import { MatTabsModule } from '@angular/material';
-
-import { AppComponent } from './app.component';
-import { FormComponent } from './form/form.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormBootstrapComponent } from './formBootstrap/formbootstrap.component';
-import { AppRoutingModule } from './app.routing.module';
-
-import { FormService } from './form.service';
-
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
+// My Modules
+import { AppComponent } from './app.component';
+import { FormComponent, FormBootstrapComponent, ValidatorMessageComponent } from './components';
+import { AppRoutingModule } from './app.routing.module';
+import { InputMaskDirective } from './directives';
+import { FormService } from './services';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     FormComponent,
-    FormBootstrapComponent
+    FormBootstrapComponent,
+    ValidatorMessageComponent,
+    InputMaskDirective
   ],
   imports: [
     BrowserModule,

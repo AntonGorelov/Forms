@@ -35,7 +35,9 @@
 
             <div class="form-group">
               <label for="phone">Phone</label>
-              <input type="text" class="form-control" id="phone" placeholder="Enter phone" formControlName="phone">
+              <input type="text" class="form-control" id="phone" placeholder="+7(___)___-____"
+                     mask="+7(000)000-0000"
+                     formControlName="phone">
             </div>
             <div class="alert alert-danger" *ngIf="phoneControl.invalid && phoneControl.touched">
               {{getErrorMessagePhone()}}
@@ -59,6 +61,11 @@
             </div>
 
             <div class="form-group">
+              <label for="hobby">Hobby</label>
+              <span class="badge badge-pill badge-light">Light</span>
+            </div>
+
+            <div class="form-group">
               <label for="sex">Sex</label>
               <div class="input-group mb-3">
                 <select class="custom-select" id="sex" formControlName="sex">
@@ -67,7 +74,6 @@
                   <option value="Female">Female</option>
                 </select>
               </div>
-
             </div>
             <div class="alert alert-danger" *ngIf="sexControl.invalid && sexControl.touched">
               Input sex, please!

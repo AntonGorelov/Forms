@@ -20,7 +20,7 @@
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput placeholder="Phone" formControlName="phone">
+        <input matInput placeholder="Phone: +7(___)___-____" formControlName="phone" mask="+7(000)000-0000">
         <mat-error *ngIf="phoneControl.invalid">{{getErrorMessagePhone()}}</mat-error>
       </mat-form-field>
 
@@ -34,6 +34,32 @@
         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker #dp></mat-datepicker>
         <mat-error *ngIf="birthdayControl.invalid || birthdayControl.pristine">You must enter a value</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-chip-list" formGroupName="hobbyVal">
+        <mat-chip-list #chipList
+                       [errorStateMatcher]="matcher">
+          <mat-chip *ngFor="let hobby of hobbies; let i = index"
+                    [selectable]="selectable"
+                    [removable]="removable"
+                    (removed)="removeHobby(i)" formArrayName="hobbyFormControl">
+            {{hobby}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+
+          <input placeholder="Hobby"
+                 [matChipInputFor]="chipList"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 [matChipInputAddOnBlur]="addOnBlur"
+                 (matChipInputTokenEnd)="addHobby($event); valuesHobby()"
+                 formControlName="hobbyFormControl">
+        </mat-chip-list>
+        <div>
+          <mat-error *ngIf="cardForm.touched && cardForm.pristine"><small>You must enter a value</small></mat-error>
+        </div>
+        <div>
+          <mat-error *ngIf="hobbyControl.invalid"><small>Min length must be 7 symbols!</small></mat-error>
+        </div>
       </mat-form-field>
 
       <mat-form-field>
@@ -59,7 +85,7 @@
 </mat-card>
 
 
-<mat-card *ngIf="isValid" class="mat-card-answer">
+<mat-card *ngIf="cardForm" class="mat-card-answer">
   <mat-card-header>
     <mat-card-title>
       <table>
@@ -91,6 +117,10 @@
       <tr>
         <td>Birthday:</td>
         <td>{{birthdayControl.value}}</td>
+      </tr>
+      <tr>
+        <td>Hobby:</td>
+        <td>{{hobbyControl.value}}</td>
       </tr>
       <tr>
         <td>Sex:</td>

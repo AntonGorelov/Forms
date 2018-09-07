@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormService } from '../form.service';
+import { FormService } from '../../services/form.service';
 
 
 @Component({
   selector: 'app-formbootstrap',
-  templateUrl: './formBootstrap.component.html',
-  styleUrls: ['./formBootstrap.component.css']
+  templateUrl: './formbootstrap.component.html',
+  styleUrls: ['./formbootstrap.component.css']
 })
 export class FormBootstrapComponent implements OnInit {
 
@@ -71,9 +71,7 @@ export class FormBootstrapComponent implements OnInit {
   }
 
   public onSubmit() {
-    console.log(this.cardForm.value);
     if (this.cardForm.valid) {
-      console.log(this.cardForm.value);
       this.isValid = true;
     }
   }

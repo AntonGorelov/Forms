@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormArray,
+  ValidatorFn
+} from '@angular/forms';
 
 
 @Injectable()
@@ -13,8 +19,6 @@ export class FormService {
     '^[-a-z0-9!#$%&\'*+/=?^_`{|}~]+(?:\\.[-a-z0-9!#$%&\'*+/=?^_`{|}~]+)*@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\\.)*(?:com|ru)$';
   public phoneRegex = '^(\\+7|7|8)?[\\s\\-]?\\(?[489][0-9]{2}\\)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$';
 
-  public isValid = false;
-
   public createNewForm() {
     this.cardForm = new FormGroup({
       name: new FormGroup({
@@ -25,6 +29,10 @@ export class FormService {
       phone:    new FormControl('', [Validators.required, Validators.pattern(this.phoneRegex)]),
       nickname: new FormControl('', [Validators.required, Validators.minLength(8)]),
       birthday: new FormControl('', Validators.required),
+      hobbyVal: new FormGroup( {
+        hobbyArray:       new FormArray([], Validators.required),
+        hobbyFormControl: new FormControl('', Validators.minLength(7))
+      }),
       sex:      new FormControl('', Validators.required),
       note:     new FormControl('', Validators.minLength(50))
     });
@@ -41,6 +49,16 @@ export class FormService {
   get nicknameControl() {
     return this.cardForm.get('nickname');
   }
+
+  get hobbyControl() {
+    return this.cardForm.get('hobbyVal.hobbyFormControl');
+  }
+
+  get hobbyArray() {
+    return this.cardForm.get('hobbyVal.hobbyArray');
+  }
+
+  // <--------------- Error Handlers --------------->
 
   public getErrorMessageEmail() {
     if (this.emailControl.hasError('required')) { return 'You must enter a value'; }
@@ -60,14 +78,31 @@ export class FormService {
         'Not a valid nickname. Min length must be 8 symbols! ';
   }
 
+  public getErrorMessageHobby() {
+    return this.hobbyControl.hasError('minLength') ? 'Not a valid hobby. Min length must be 7 symbols!' :
+      this.hobbyArray.hasError('required') ? '' : 'Input value';
+  }
+
   public onSubmit() {
     if (this.cardForm.valid) {
-      console.log(this.cardForm.value);
-      this.isValid = true;
+      console.log(this.cardForm.controls);
     }
   }
 
   public clearForm() {
     this.cardForm.reset();
+  }
+
+
+  private _hobbyValidator(): ValidatorFn {
+    // for (let i = 0; i < this.cardForm.get('hobby').value.length; i++ ) {
+    //
+    // }
+    return (control: FormArray) => {
+      const error = [];
+      control.controls.forEach(item => item.invalid && error.push(item.value));
+
+      return null;
+    };
   }
 }
