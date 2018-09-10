@@ -10,10 +10,20 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 // My Modules
 import { AppComponent } from './app.component';
-import { FormComponent, FormBootstrapComponent, ValidatorMessageComponent } from './components';
+import {
+  FormComponent,
+  FormBootstrapComponent,
+  ValidatorMessageComponent,
+  CardAnswerDialogComponent,
+  CardAnswerDialogBootstrapComponent
+} from './components';
 import { AppRoutingModule } from './app.routing.module';
 import { InputMaskDirective } from './directives';
 import { FormService } from './services';
+
+// NgX Bootstrap
+import { ModalBackdropComponent } from 'ngx-bootstrap';
+import { ModalContainerComponent } from 'ngx-bootstrap/modal';
 
 
 @NgModule({
@@ -22,7 +32,11 @@ import { FormService } from './services';
     FormComponent,
     FormBootstrapComponent,
     ValidatorMessageComponent,
-    InputMaskDirective
+    CardAnswerDialogComponent,
+    CardAnswerDialogBootstrapComponent,
+    InputMaskDirective,
+    ModalBackdropComponent,
+    ModalContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +46,13 @@ import { FormService } from './services';
     AppRoutingModule,
     FormsModule,
     BsDatepickerModule.forRoot()
+  ],
+  exports: [ModalBackdropComponent],
+  entryComponents: [
+    CardAnswerDialogComponent,
+    CardAnswerDialogBootstrapComponent,
+    ModalBackdropComponent,
+    ModalContainerComponent
   ],
   providers: [FormService],
   bootstrap: [AppComponent]

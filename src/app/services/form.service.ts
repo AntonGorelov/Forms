@@ -13,6 +13,8 @@ export class FormService {
 
   constructor() {}
 
+  public hobbies = [];
+
   public cardForm: FormGroup;
 
   public emailRegex =
@@ -78,14 +80,9 @@ export class FormService {
         'Not a valid nickname. Min length must be 8 symbols! ';
   }
 
-  public getErrorMessageHobby() {
-    return this.hobbyControl.hasError('minLength') ? 'Not a valid hobby. Min length must be 7 symbols!' :
-      this.hobbyArray.hasError('required') ? '' : 'Input value';
-  }
-
   public onSubmit() {
     if (this.cardForm.valid) {
-      console.log(this.cardForm.controls);
+      console.log('FormService data: ', this.cardForm.controls);
     }
   }
 

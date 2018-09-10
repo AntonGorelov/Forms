@@ -72,7 +72,9 @@ export class InputMaskDirective implements OnInit {
   }
 
   private applyMask(value): void {
-    // debugger;
+    if (value.length > 10) {
+      return;
+    }
     if (!this.mask) { return; }
     let newValue = '';
     let maskPosition = 0;

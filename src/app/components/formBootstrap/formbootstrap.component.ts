@@ -1,18 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FormService } from '../../services/form.service';
+import { FormService } from '../../services';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { CardAnswerDialogBootstrapComponent } from '../cardAnswerDialogBootstrap';
 
 
 @Component({
   selector: 'app-formbootstrap',
   templateUrl: './formbootstrap.component.html',
-  styleUrls: ['./formbootstrap.component.css']
+  styleUrls: ['./formbootstrap.component.css'],
+  providers: [BsModalService]
 })
 export class FormBootstrapComponent implements OnInit {
 
   public isValid = false;
 
-  constructor(public formService: FormService) {}
+  bsModalRef: BsModalRef;
+
+  constructor(public formService: FormService, private _modalService: BsModalService) {}
 
   public ngOnInit() {
     this.createNewForm();
@@ -74,5 +81,15 @@ export class FormBootstrapComponent implements OnInit {
     if (this.cardForm.valid) {
       this.isValid = true;
     }
+  }
+
+  // <--------------- Dialog --------------->
+
+  public openCardAnswerDialog() {
+    const initialState = {
+      title: 'Card answer'
+    };
+    this.bsModalRef = this._modalService.show(CardAnswerDialogBootstrapComponent, {initialState});
+    this.bsModalRef.content.closeBtnName = 'Close';
   }
 }

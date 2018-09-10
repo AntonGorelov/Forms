@@ -1,0 +1,58 @@
+<h5 class="mat-card-answer-title" mat-dialog-title>Card answer</h5>
+<mat-dialog-content>
+
+  <mat-card class="mat-card-answer">
+    <mat-card-header>
+      <mat-card-title>
+        <table>
+          <tr>
+            <td>First name:</td>
+            <td>{{fName}}</td>
+          </tr>
+          <tr>
+            <td>Last name:</td>
+            <td>{{lName}}</td>
+          </tr>
+        </table>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table>
+        <tr>
+          <td>Email:</td>
+          <td>{{email}}</td>
+        </tr>
+        <tr>
+          <td>Phone:</td>
+          <td>{{phone}}</td>
+        </tr>
+        <tr>
+          <td>Nickname:</td>
+          <td>{{nickname}}</td>
+        </tr>
+        <tr>
+          <td>Birthday:</td>
+          <td>{{birthday}}</td>
+        </tr>
+        <tr>
+          <td>Hobby:</td>
+
+          <td *ngFor="let value of hobby">{{value}}</td>
+        </tr>
+        <tr>
+          <td>Sex:</td>
+          <td>{{sex}}</td>
+        </tr>
+        <tr *ngIf="note?.length > 0">
+          <td>Note:</td>
+          <td>{{note}}</td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+</mat-dialog-content>
+<mat-dialog-actions class="mat-card-answer-buttons">
+  <button mat-button type="submit">Ok</button>
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

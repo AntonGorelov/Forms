@@ -76,60 +76,10 @@
       </mat-form-field>
 
       <div class="mat-form-buttons">
-        <button mat-raised-button color="primary" type="submit">Submit</button>
+        <button mat-raised-button color="primary" type="submit" (click)="openCardAnswerDialog()">Submit</button>
         <button mat-raised-button (click)="clearForm()">Clear</button>
       </div>
 
     </form>
-  </mat-card-content>
-</mat-card>
-
-
-<mat-card *ngIf="cardForm" class="mat-card-answer">
-  <mat-card-header>
-    <mat-card-title>
-      <table>
-        <tr>
-          <td>First name:</td>
-          <td>{{fNameControl.value}}</td>
-        </tr>
-        <tr>
-          <td>Last name:</td>
-          <td>{{lNameControl.value}}</td>
-        </tr>
-      </table>
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <table>
-      <tr>
-        <td>Email:</td>
-        <td>{{emailControl.value}}</td>
-      </tr>
-      <tr>
-        <td>Phone:</td>
-        <td>{{phoneControl.value}}</td>
-      </tr>
-      <tr>
-        <td>Nickname:</td>
-        <td>{{nicknameControl.value}}</td>
-      </tr>
-      <tr>
-        <td>Birthday:</td>
-        <td>{{birthdayControl.value}}</td>
-      </tr>
-      <tr>
-        <td>Hobby:</td>
-        <td>{{hobbyControl.value}}</td>
-      </tr>
-      <tr>
-        <td>Sex:</td>
-        <td>{{sexControl.value}}</td>
-      </tr>
-      <tr *ngIf="noteControl.value">
-        <td>Note:</td>
-        <td>{{noteControl.value}}</td>
-      </tr>
-    </table>
   </mat-card-content>
 </mat-card>

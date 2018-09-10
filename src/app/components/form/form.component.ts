@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import { FormArray, FormControl, Validators} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material';
+import { MatChipInputEvent, MatDialog, MatDialogRef } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 
 import { FormService } from '../../services';
+import { CardAnswerDialogComponent } from '../cardAnswerDialog';
 
 const moment = _moment;
 
@@ -44,7 +45,9 @@ export class FormComponent implements OnInit {
 
   matcher = new ErrorStateMatcher();
 
-  constructor(public formService: FormService) {}
+  cardAnswerDialogRef: MatDialogRef<CardAnswerDialogComponent>;
+
+  constructor(public formService: FormService, private _matDialog: MatDialog) {}
 
   public ngOnInit() {
     this.createNewForm();
@@ -110,13 +113,8 @@ export class FormComponent implements OnInit {
     return this.formService.getErrorMessageNickname();
   }
 
-  public getErrorMessageHobby() {
-    return this.formService.getErrorMessageHobby();
-  }
-
   public onSubmit() {
     this.formService.onSubmit();
-    console.log(this.cardForm);
   }
 
   public clearForm() {
@@ -146,11 +144,31 @@ export class FormComponent implements OnInit {
     for (let i = 0; i < this.cardForm.get('hobbyVal').value.hobbyArray.length; i++) {
       this.hobbies.push(this.cardForm.get('hobbyVal').value.hobbyArray[i].value);
     }
+    this.formService.hobbies = this.hobbies;
   }
 
   public removeHobby(i: number) {
     (<FormArray>this.cardForm.get('hobbyVal')).value.hobbyArray.splice(i, 1);
     this.hobbies.splice(i, 1);
+    this.formService.hobbies = this.hobbies;
   }
 
+  // <--------------- Dialog --------------->
+
+  public openCardAnswerDialog() {
+    this.cardAnswerDialogRef = this._matDialog.open(CardAnswerDialogComponent, {
+      width: '390px',
+      data: {
+        fName:    this.formService.cardForm.value.name.firstName,
+        lName:    this.formService.cardForm.value.name.lastName,
+        email:    this.formService.cardForm.value.email,
+        phone:    this.formService.cardForm.value.phone,
+        nickname: this.formService.cardForm.value.nickname,
+        birthday: this.formService.cardForm.value.birthday,
+        hobby:    this.formService.hobbies,
+        sex:      this.formService.cardForm.value.sex,
+        note:     this.formService.cardForm.value.note
+      }
+    });
+  }
 }
