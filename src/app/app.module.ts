@@ -25,6 +25,8 @@ import { FormService } from './services';
 import { ModalBackdropComponent } from 'ngx-bootstrap';
 import { ModalContainerComponent } from 'ngx-bootstrap/modal';
 
+// NgX Chips
+import { TagInputModule } from 'ngx-chips';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,8 @@ import { ModalContainerComponent } from 'ngx-bootstrap/modal';
     MatTabsModule,
     AppRoutingModule,
     FormsModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    TagInputModule
   ],
   exports: [ModalBackdropComponent],
   entryComponents: [

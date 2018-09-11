@@ -32,7 +32,7 @@ export class CardAnswerDialogBootstrapComponent implements OnInit {
     this.phone = this._formService.cardForm.value.phone;
     this.nickname = this._formService.cardForm.value.nickname;
     this.birthday = this._formService.cardForm.value.birthday;
-    this.hobby = this._formService.cardForm.value.hobby;
+    this.hobby = this._formService.hobbies;
     this.sex = this._formService.cardForm.value.sex;
     this.note = this._formService.cardForm.value.note;
   }

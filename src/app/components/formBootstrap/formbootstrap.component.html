@@ -53,16 +53,27 @@
 
             <div class="form-group">
               <label for="birthday">Birthday</label>
-              <!--<input type="text" class="form-control" id="birthday" placeholder="Enter birthday">-->
               <input type="text" placeholder="Enter birthday" id="birthday" class="form-control" bsDatepicker formControlName="birthday">
             </div>
             <div class="alert alert-danger" *ngIf="birthdayControl.invalid && birthdayControl.touched">
               Input birthday, please!
             </div>
 
-            <div class="form-group">
+            <div class="form-group" formGroupName="hobbyVal">
               <label for="hobby">Hobby</label>
-              <span class="badge badge-pill badge-light">Light</span>
+              <tag-input [editable]='false'
+                         [ngModel]="hobbies"
+                         formControlName="hobbyFormControl"
+                         (onAdd)="addHobby($event); valuesHobby()"
+                         (onRemove)="removeHobby($event)"
+                         id="hobby">
+              </tag-input>
+              <div class="alert alert-danger" *ngIf="hobbyFormControl.touched && (hobbies.length < 1)">
+                Required
+              </div>
+              <div class="alert alert-danger" *ngIf="minLengthFlag">
+                Min length
+              </div>
             </div>
 
             <div class="form-group">

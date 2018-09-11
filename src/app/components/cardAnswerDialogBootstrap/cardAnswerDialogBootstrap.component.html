@@ -1,54 +1,7 @@
-<!--<div class="card-answer-container">-->
-
-  <!--<div class="card bg-light mb-3 card-answer">-->
-    <!--<div class="card-header">Valid form</div>-->
-    <!--<div class="card-body">-->
-      <!--<table>-->
-        <!--<tr>-->
-          <!--<td>First name:</td>-->
-          <!--<td>{{fNameControl.value}}</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-          <!--<td>Last name:</td>-->
-          <!--<td>{{lNameControl.value}}</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-          <!--<td>Email:</td>-->
-          <!--<td>{{emailControl.value}}</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-          <!--<td>Phone:</td>-->
-          <!--<td>{{phoneControl.value}}</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-          <!--<td>Nickname:</td>-->
-          <!--<td>{{nicknameControl.value}}</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-          <!--<td>Birthday:</td>-->
-          <!--<td>{{birthdayControl.value}}</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-          <!--<td>Sex:</td>-->
-          <!--<td>{{sexControl.value}}</td>-->
-        <!--</tr>-->
-        <!--<tr *ngIf="noteControl.value">-->
-          <!--<td>Note:</td>-->
-          <!--<td>{{noteControl.value}}</td>-->
-        <!--</tr>-->
-      <!--</table>-->
-    <!--</div>-->
-  <!--</div>-->
-
-<!--</div>-->
-
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
       <h4 class="modal-title pull-left">{{title}}</h4>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
-        <span aria-hidden="true">&times;</span>
-      </button>
     </div>
     <div class="modal-body">
       <table>
@@ -75,6 +28,10 @@
         <tr>
           <td>Birthday:</td>
           <td>{{birthday}}</td>
+        </tr>
+        <tr>
+          <td>Hobby:</td>
+          <td *ngFor="let value of hobby">{{value}}</td>
         </tr>
         <tr>
           <td>Sex:</td>

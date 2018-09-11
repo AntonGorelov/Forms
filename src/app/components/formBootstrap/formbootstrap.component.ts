@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormService } from '../../services';
+import { CardAnswerDialogBootstrapComponent } from '../cardAnswerDialogBootstrap';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { CardAnswerDialogBootstrapComponent } from '../cardAnswerDialogBootstrap';
+import { FormArray, FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -16,6 +17,10 @@ import { CardAnswerDialogBootstrapComponent } from '../cardAnswerDialogBootstrap
 export class FormBootstrapComponent implements OnInit {
 
   public isValid = false;
+
+  public hobbies = this.formService.hobbies;
+
+  public minLengthFlag = false;
 
   bsModalRef: BsModalRef;
 
@@ -57,6 +62,10 @@ export class FormBootstrapComponent implements OnInit {
     return this.cardForm.get('birthday');
   }
 
+  get hobbyFormControl() {
+    return this.cardForm.get('hobbyVal.hobbyFormControl');
+  }
+
   get sexControl() {
     return this.cardForm.get('sex');
   }
@@ -83,9 +92,51 @@ export class FormBootstrapComponent implements OnInit {
     }
   }
 
+  // <--------------- Chips --------------->
+
+  public temp(value) {
+    return new FormControl(value, Validators.minLength(7));
+  }
+
+  public addHobby(event) {
+    const input = event.input;
+    const value = event.value;
+    if ((value || '').trim()) {
+      if (value.length > 7) {
+        (<FormArray>this.cardForm.get('hobbyVal')).value.hobbyArray.push(this.temp(event.value));
+      } else {
+        this.minLengthFlag = true;
+      }
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  public valuesHobby() {
+    this.hobbies = [];
+
+    for (let i = 0; i < this.cardForm.get('hobbyVal').value.hobbyArray.length; i++) {
+      this.hobbies.push(this.cardForm.get('hobbyVal').value.hobbyArray[i].value);
+    }
+    this.formService.hobbies = this.hobbies;
+  }
+
+  public removeHobby(event) {
+    (<FormArray>this.cardForm.get('hobbyVal')).value.hobbyArray.splice(event);
+    const index = this.hobbies.indexOf(event);
+
+    if (index !== -1) {
+      this.hobbies.splice(index, 1);
+    }
+
+    this.formService.hobbies = this.hobbies;
+  }
+
   // <--------------- Dialog --------------->
 
   public openCardAnswerDialog() {
+    console.log(this.cardForm.controls.hobbyVal.value.hobbyFormControl);
     const initialState = {
       title: 'Card answer'
     };

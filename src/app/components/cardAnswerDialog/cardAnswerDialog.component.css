@@ -5,3 +5,6 @@
   display: flex;
   justify-content: center;
 }
+.mat-dialog-content {
+  padding: 5px 24px;
+}
