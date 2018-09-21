@@ -53,7 +53,12 @@
 
             <div class="form-group">
               <label for="birthday">Birthday</label>
-              <input type="text" placeholder="Enter birthday" id="birthday" class="form-control" bsDatepicker formControlName="birthday">
+              <input type="text"
+                     placeholder="Enter birthday"
+                     id="birthday"
+                     class="form-control"
+                     [maxDate]="date"
+                     bsDatepicker formControlName="birthday">
             </div>
             <div class="alert alert-danger" *ngIf="birthdayControl.invalid && birthdayControl.touched">
               Input birthday, please!
@@ -69,10 +74,11 @@
                          id="hobby">
               </tag-input>
               <div class="alert alert-danger" *ngIf="hobbyFormControl.touched && (hobbies.length < 1)">
-                Required
+                Input hobby, please!
               </div>
+              <!-- hobbyFormControl.value && hobbyFormControl.invalid && hobbyFormControl.touched -->
               <div class="alert alert-danger" *ngIf="minLengthFlag">
-                Min length
+                Min length must be 7 symbols!
               </div>
             </div>
 

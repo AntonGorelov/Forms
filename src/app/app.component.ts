@@ -17,14 +17,22 @@ export class AppComponent {
       { name: 'Form',
         link: '/form'
       },
-      { name: 'FormBootstrap',
+      { name: 'Form Bootstrap',
         link: '/formbootstrap'
+      },
+      {
+        name: 'Stepper',
+        link: '/stepper'
       }];
     this.router.events.subscribe(() => {
       if (this.router.url === this.links[0].link) {
         this.activeLink = this.links[0];
-      } else {
+      }
+      if (this.router.url === this.links[1].link) {
         this.activeLink = this.links[1];
+      }
+      if (this.router.url === this.links[2].link) {
+        this.activeLink = this.links[2];
       }
     });
 

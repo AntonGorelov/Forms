@@ -1,0 +1,30 @@
+.mat-card-content {
+  margin: 14px 0px;
+}
+.mat-card-content-value {
+  font-weight: bold;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: auto;
+}
+.GitHub{
+  background: url("http://www.macdrifter.com/theme/images/octocat-black.svg") center/contain no-repeat;
+  white-space: nowrap
+
+}
+.Facebook{
+  background: url("https://assets-cdn.github.com/images/modules/site/logos/facebook-logo.png") center/contain no-repeat;
+  white-space: nowrap;
+  display:inline
+}
+.network-img {
+  width: 22px;
+  height: 22px;
+  margin-top: 7px;
+}
+.network-value {
+  margin-left: 7px;
+}

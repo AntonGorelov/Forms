@@ -1,0 +1,51 @@
+{
+  "users": [
+    {
+      "name": {
+        "firstName": "Nina",
+        "lastName": "Vladimirovna"
+      },
+      "nickname": "NinaJ",
+      "birthday": "05.08.95",
+      "address": "339 Str div",
+      "phone": "8(900)9009090",
+      "email": "admin@admin.com",
+      "socNetworks": "",
+      "password": "",
+      "confirmPassword": ""
+    },
+    {
+      "name": {
+        "firstName": "Kirill",
+        "lastName": "S"
+      },
+      "nickname": "KirS",
+      "birthday": "02.10.94",
+      "address": "339 Str div",
+      "phone": "8(900)8008080",
+      "email": "admin@wis.com",
+      "socNetworks": "",
+      "password": "",
+      "confirmPassword": ""
+    },
+    {
+      "id": 1,
+      "name": {
+        "firstName": "admin",
+        "lastName": "admin"
+      },
+      "nickname": "interestNickname",
+      "birthday": "2018-09-16T21:00:00.000Z",
+      "address": [
+        {
+          "address": ""
+        }
+      ],
+      "phone": "89009009090",
+      "email": "admin@wis.com",
+      "socNetworks": "github.com/",
+      "password": "aaaaaaa",
+      "confirmPassword": "aaaaaaa"
+    }
+  ]
+}

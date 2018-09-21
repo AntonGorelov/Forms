@@ -22,12 +22,23 @@ export class FormBootstrapComponent implements OnInit {
 
   public minLengthFlag = false;
 
+  // Max date for limit date in datepicker
+  public date = this.formService.date;
+
   bsModalRef: BsModalRef;
 
   constructor(public formService: FormService, private _modalService: BsModalService) {}
 
   public ngOnInit() {
     this.createNewForm();
+
+    // this.hobbyFormControl.valueChanges
+    //   .pipe(
+    //     debounceTime(250)
+    //   )
+    //   .subscribe(() => {
+    //
+    //   });
   }
 
   public createNewForm() {

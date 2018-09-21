@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 // Material Modules
 import { MaterialModule } from './material.module';
@@ -15,11 +16,13 @@ import {
   FormBootstrapComponent,
   ValidatorMessageComponent,
   CardAnswerDialogComponent,
-  CardAnswerDialogBootstrapComponent
+  CardAnswerDialogBootstrapComponent,
+  StepperComponent,
+  AddressComponent
 } from './components';
 import { AppRoutingModule } from './app.routing.module';
 import { InputMaskDirective } from './directives';
-import { FormService } from './services';
+import { FormService, StepperService } from './services';
 
 // NgX Bootstrap
 import { ModalBackdropComponent } from 'ngx-bootstrap';
@@ -27,6 +30,10 @@ import { ModalContainerComponent } from 'ngx-bootstrap/modal';
 
 // NgX Chips
 import { TagInputModule } from 'ngx-chips';
+
+// Angular Google Maps
+import { AgmCoreModule } from '@agm/core';
+
 
 @NgModule({
   declarations: [
@@ -38,7 +45,9 @@ import { TagInputModule } from 'ngx-chips';
     CardAnswerDialogBootstrapComponent,
     InputMaskDirective,
     ModalBackdropComponent,
-    ModalContainerComponent
+    ModalContainerComponent,
+    StepperComponent,
+    AddressComponent
   ],
   imports: [
     BrowserModule,
@@ -47,8 +56,13 @@ import { TagInputModule } from 'ngx-chips';
     MatTabsModule,
     AppRoutingModule,
     FormsModule,
+    HttpClientModule,
     BsDatepickerModule.forRoot(),
-    TagInputModule
+    TagInputModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDqnv30J63X9uYnr5yXA7lkUSKrp_cHGIM',
+      libraries: ['places']
+    })
   ],
   exports: [ModalBackdropComponent],
   entryComponents: [
@@ -57,7 +71,7 @@ import { TagInputModule } from 'ngx-chips';
     ModalBackdropComponent,
     ModalContainerComponent
   ],
-  providers: [FormService],
+  providers: [FormService, StepperService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

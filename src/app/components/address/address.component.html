@@ -1,0 +1,6 @@
+<mat-form-field>
+  <input matInput placeholder="Address" id="autocomplete" #search >
+</mat-form-field>
+<agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+  <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+</agm-map>

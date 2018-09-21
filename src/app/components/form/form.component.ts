@@ -3,40 +3,22 @@ import { FormArray, FormControl, Validators} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent, MatDialog, MatDialogRef } from '@angular/material';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import * as _moment from 'moment';
-
 import { FormService } from '../../services';
 import { CardAnswerDialogComponent } from '../cardAnswerDialog';
 
-const moment = _moment;
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'LL',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css'],
-  providers: [
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-  ]
+  styleUrls: ['./form.component.css']
 })
 
 export class FormComponent implements OnInit {
 
   public hobbies = [];
+
+  // Max date for limit date in datepicker
+  public date = this.formService.date;
 
   public selectable = true;
   public removable = true;

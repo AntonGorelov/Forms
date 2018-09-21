@@ -1,0 +1,166 @@
+<mat-horizontal-stepper #stepper>
+
+  <mat-step [stepControl]="firstFormGroup">
+    <mat-card>
+      <mat-card-content class="mat-card-content">
+
+        <form class="form" novalidate [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Fill out your name</ng-template>
+          <mat-form-field formGroupName="name">
+            <input matInput placeholder="First name" required formControlName="firstName">
+            <mat-error *ngIf="fNameControl.invalid || fNameControl.touched">You must enter a value</mat-error>
+          </mat-form-field>
+          <mat-form-field formGroupName="name">
+            <input matInput placeholder="Last name" required formControlName="lastName">
+            <mat-error *ngIf="lNameControl.invalid || lNameControl.touched">You must enter a value</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Nickname" required formControlName="nickname">
+            <mat-error *ngIf="nicknameControl.invalid || nicknameControl.touched">{{getErrorMessageNickname()}}</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dp" [max]="date" placeholder="Birthday" required formControlName="birthday">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+            <mat-error *ngIf="birthdayControl.invalid || birthdayControl.touched">You must enter a value</mat-error>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup">
+    <mat-card>
+      <mat-card-content class="mat-card-content">
+
+        <form class="form" novalidate [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Fill out your address</ng-template>
+          <div *ngFor="let address of secondFormGroup.controls['address'].controls; let i = index">
+            <!--<app-address></app-address>-->
+            <!--<mat-form-field>-->
+              <!--<input matInput placeholder="Address" required formArrayName="address" #search>-->
+              <!--<mat-error *ngIf="addressControl.invalid || addressControl.touched">You must enter a value</mat-error>-->
+            <!--</mat-form-field>-->
+            <button mat-button *ngIf="secondFormGroup.controls['address'].controls.length > 1"
+                    (click)="removeAddress(i)">Delete</button>
+          </div>
+          <button mat-button (click)="addAddress()">Add address</button>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+
+  <mat-step [stepControl]="thirdFormGroup">
+    <mat-card>
+      <mat-card-content class="mat-card-content">
+
+        <form class="form" novalidate [formGroup]="thirdFormGroup">
+          <ng-template matStepLabel>Fill out your contact information</ng-template>
+          <mat-form-field>
+            <input matInput placeholder="Phone" required formControlName="phone">
+            <mat-error *ngIf="phoneControl.invalid || phoneControl.touched">{{getErrorMessagePhone()}}</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Email" required formControlName="email">
+            <mat-error *ngIf="emailControl.invalid || emailControl.touched">{{getErrorMessageEmail()}}</mat-error>
+          </mat-form-field>
+          <div>
+            <mat-form-field>
+              <mat-select placeholder="Social network"
+                          [(value)]="selected"
+                          [ngClass]="selected"
+                          (selectionChange)="selectValue($event)"
+                          formArrayName="typeSocNetworks">
+                <mat-option *ngFor="let network of networks" value="{{network.value}}">
+                  <img src="{{network.logo}}" class="network-img">
+                  <span class="network-value">{{network.value}}</span>
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="typeSocNetworksControl.invalid || typeSocNetworksControl.touched">
+                You must enter a value
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Social networks" formControlName="socNetworks">
+              <mat-error *ngIf="socNetworksControl.invalid || socNetworksControl.touched">
+                {{getErrorMessageSocialNetworks()}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+
+  <mat-step [stepControl]="fourthFormGroup">
+    <mat-card>
+      <mat-card-content class="mat-card-content">
+
+        <form class="form" [formGroup]="fourthFormGroup">
+          <ng-template matStepLabel>Fill out your password</ng-template>
+          <mat-form-field>
+            <input matInput placeholder="Password" type="password" required formControlName="password">
+            <mat-error *ngIf="passwordControl.invalid || passwordControl.touched">
+              {{getErrorMessagePassword()}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Confirm password" type="password" required formControlName="confirmPassword">
+            <mat-error *ngIf="confirmPasswordControl.invalid || confirmPasswordControl.touched">
+              {{getErrorMessageConfirmPassword()}}
+            </mat-error>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext (click)="putValues()">Next</button>
+          </div>
+        </form>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+
+  <mat-step>
+    <mat-card>
+      <mat-card-content class="mat-card-content">
+
+        <ng-template matStepLabel>Done</ng-template>
+        You are now done.
+
+        <mat-card>
+          <mat-card-content>
+            <small>in dev!</small><br>
+            <div><span class="mat-card-content-value">First name: </span> {{firstFormGroup.value.name.firstName}}</div>
+            <div><span class="mat-card-content-value">Last name: </span>  {{firstFormGroup.value.name.lastName}}</div>
+            <div><span class="mat-card-content-value">Nickname: </span>   {{firstFormGroup.value.nickname}}</div>
+            <div><span class="mat-card-content-value">Birthday: </span>   {{firstFormGroup.value.birthday}}</div>
+            <div><span class="mat-card-content-value">Address: </span>
+              <span *ngFor="let ads of secondFormGroup.value.address">{{ads}}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+</mat-horizontal-stepper>

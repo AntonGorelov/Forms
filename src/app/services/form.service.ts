@@ -21,6 +21,9 @@ export class FormService {
     '^[-a-z0-9!#$%&\'*+/=?^_`{|}~]+(?:\\.[-a-z0-9!#$%&\'*+/=?^_`{|}~]+)*@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\\.)*(?:com|ru)$';
   public phoneRegex = '^(\\+7|7|8)?[\\s\\-]?\\(?[489][0-9]{2}\\)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$';
 
+  public date = new Date();
+  public maxDate = this.date.setDate(this.date.getDate() - 1);
+
   public createNewForm() {
     this.cardForm = new FormGroup({
       name: new FormGroup({
