@@ -8,6 +8,14 @@ import {debounceTime, tap} from 'rxjs/operators';
 declare var google: any;
 
 
+interface Marker {
+  name?: string;
+  lat: number;
+  lng: number;
+  draggable: boolean;
+}
+
+
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
@@ -15,9 +23,18 @@ declare var google: any;
 })
 export class AddressComponent implements OnInit, AfterViewInit {
 
-  public latitude: number;
-  public longitude: number;
-  public zoom: number;
+  public latitude = 39.8282;
+  public longitude = -98.5795;
+  public zoom = 13;
+
+  public markers: Marker[] = [
+    {
+      name: 'Address 1',
+      lat: 39.8282,
+      lng: -98.5795,
+      draggable: true
+    }
+  ];
 
   private _autocompleteSubject$ = new Subject<void>();
 
@@ -29,10 +46,7 @@ export class AddressComponent implements OnInit, AfterViewInit {
               private _ngZone: NgZone) {}
 
   ngOnInit() {
-    this.latitude = 39.8282;
-    this.longitude = -98.5795;
-    this.zoom = 13;
-    this.setCurrentPosition();
+    // this.setCurrentPosition();
 
     this._autocompleteSubject$
       .pipe(
@@ -57,12 +71,10 @@ export class AddressComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.initAutocomplete();
+    // this.initAutocomplete();
   }
 
   public initAutocomplete() {
-    // const input = document.getElementById('autocomplete');
-
     this._mapsAPILoader.load()
       .then(() => {
         const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
@@ -80,6 +92,22 @@ export class AddressComponent implements OnInit, AfterViewInit {
         this.longitude = position.coords.longitude;
       });
     }
+  }
+
+  // <--------------- Handlers --------------->
+
+  public mapClicked($event: any) {
+    const newMarker = {
+      name: 'Untitled',
+      lat: $event.coords.lat,
+      lng: $event.coords.lng,
+      draggable: false
+    };
+    this.markers.push(newMarker);
+  }
+
+  public markerDragEnd(marker: any, $event: any) {
+    console.log('marker:', marker, ' ; event: ', $event);
   }
 
 }

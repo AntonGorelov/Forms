@@ -1,14 +1,15 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { debounceTime, take } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
+
 import { StepperService } from '../../services';
-import { Address } from '../../models';
-import { debounceTime } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
-  styleUrls: ['./stepper.component.css']
+  styleUrls: ['./stepper.component.css'],
 })
 export class StepperComponent implements OnInit {
 
@@ -17,49 +18,31 @@ export class StepperComponent implements OnInit {
   public thirdFormGroup: FormGroup;
   public fourthFormGroup: FormGroup;
 
-  // Max date for limit date in datepicker
-  public date = this._stepperService.date;
-
   // Array with Address values: country, city, street and number of house
-  public address: Address[];
-
-  @ViewChild('search')
-  public searchElementRef: ElementRef;
-
-  // Search element value
-  public searchValue;
+  public address = [];
 
   // Select of social network. Need for add image
   public selected: 'none';
 
   // Social networks
   public networks = [
-    { value: 'GitHub',   logo: 'http://www.macdrifter.com/theme/images/octocat-black.svg'},
-    { value: 'Facebook', logo: 'https://assets-cdn.github.com/images/modules/site/logos/facebook-logo.png'}
+    { value: 'GitHub',   logo: 'https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-128.png'},
+    { value: 'Facebook', logo: 'https://cdn4.iconfinder.com/data/icons/bettericons/354/facebook-circle-128.png'}
   ];
-
-  // Activate field after change social network
-  public disableSelect = true;
 
   public selectedValue = '';
 
-  constructor(private _stepperService: StepperService) {}
+  // List of users in database
+  public users: any;
 
-  ngOnInit() {
-    this._stepperService.createStepper();
-    this.firstFormGroup = this._stepperService.firstFormGroup;
-    this.secondFormGroup = this._stepperService.secondFormGroup;
-    this.thirdFormGroup = this._stepperService.thirdFormGroup;
-    this.fourthFormGroup = this._stepperService.fourthFormGroup;
+  // Columns in result table
+  public displayedColumns: string[] = ['First Name', 'Last Name', 'Nickname', 'Birthday', 'Address', 'Phone', 'Email', 'Social Net'];
 
-    this.thirdFormGroup.get('socNetworks').valueChanges.pipe(
-      debounceTime(500)
-    ).subscribe(value => {
-      console.log(value);
-    });
+  // Flag for view table on the page
+  public isQuerySuccess = this._stepperService.isQuerySuccess;
 
-    this.getValues();
-  }
+  constructor(private _stepperService: StepperService,
+              public snackBar: MatSnackBar) {}
 
   // <--------------- Get values --------------->
 
@@ -77,6 +60,11 @@ export class StepperComponent implements OnInit {
 
   get birthdayControl() {
     return this._stepperService.birthdayControl;
+  }
+
+  // Max date for limit date in datepicker
+  get dateControl() {
+    return this._stepperService.date;
   }
 
   get addressControl() {
@@ -107,6 +95,22 @@ export class StepperComponent implements OnInit {
     return this._stepperService.confirmPasswordControl;
   }
 
+  ngOnInit() {
+    this._stepperService.createStepper();
+    this.firstFormGroup = this._stepperService.firstFormGroup;
+    this.secondFormGroup = this._stepperService.secondFormGroup;
+    this.thirdFormGroup = this._stepperService.thirdFormGroup;
+    this.fourthFormGroup = this._stepperService.fourthFormGroup;
+
+    this.thirdFormGroup.get('socNetworks').valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe(value => {
+      console.log('socNetwork value', value);
+    });
+
+    // this.getValues();
+  }
+
   // <--------------- Error Handlers --------------->
 
   getErrorMessageNickname() {
@@ -134,9 +138,6 @@ export class StepperComponent implements OnInit {
   }
 
   public addAddress() {
-    // this.searchValue = this.searchElementRef.nativeElement.value;
-    // console.log('search value: ', this.searchValue);
-    // this._stepperService.searchElementRef = this.searchElementRef;
     this._stepperService.addAddress();
   }
 
@@ -146,23 +147,8 @@ export class StepperComponent implements OnInit {
 
   public selectValue(event) {
     this.selectedValue = event.value;
-    // console.log('selectedvalue', this.selectedValue);
-    // console.log('disabled', this.thirdFormGroup.get('socNetworks').disabled);
     this.thirdFormGroup.controls.socNetworks.enable();
     this._stepperService.selectedValue = this.selectedValue;
-    // debugger;
-    // this.thirdFormGroup.get('typeSocNetworks').valueChanges.
-    // subscribe(selectedValue => {
-    //   if (selectedValue === 'GitHub') {
-    //     this.thirdFormGroup.get('socNetworks').reset();
-    //     this.thirdFormGroup.controls.socNetworks.enable();
-    //     console.log('disabled', this.thirdFormGroup.get('socNetworks').disabled);
-    //   }
-    // });
-    // this._stepperService.selectedValue = this.selectedValue;
-
-    // this._stepperService.socialNetValidator();
-    console.log('value', this.selectedValue);
   }
 
   public onSubmit() {
@@ -172,11 +158,30 @@ export class StepperComponent implements OnInit {
   // <--------------- Http queries --------------->
 
   public getValues() {
-    this._stepperService.getValues();
+    // take(1) = use only one subscription
+    this._stepperService.getValues().pipe(take(1)).subscribe(
+      (userList) => {
+        this.users = userList;
+      }
+    );
   }
 
   public putValues() {
-    this._stepperService.putValues();
+    this._stepperService.putValues().subscribe(() => {
+      this.getValues();
+    });
+  }
+
+  public resetForm(stepper) {
+    this._stepperService.resetForm(stepper);
+  }
+
+  // <--------------- UI --------------->
+
+  public openSnackBar() {
+    this.snackBar.open('User ' + this.fNameControl.value + ' successfully added!', 'OK!', {
+      duration: 1700
+    });
   }
 
 }

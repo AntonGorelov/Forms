@@ -1,7 +1,12 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable, Output, ViewChild} from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators, FormBuilder, AbstractControl } from '@angular/forms';
-import { Address } from '../models';
 import { HttpClient } from '@angular/common/http';
+import { MatStepper } from '@angular/material';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+
+import { UserModel } from '../models';
+
 
 @Injectable()
 export class StepperService {
@@ -21,31 +26,36 @@ export class StepperService {
     '^[-a-z0-9!#$%&\'*+/=?^_`{|}~]+(?:\\.[-a-z0-9!#$%&\'*+/=?^_`{|}~]+)*@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\\.)*(?:com|ru)$';
   public phoneRegex = '^(\\+7|7|8)?[\\s\\-]?\\(?[489][0-9]{2}\\)?[\\s\\-]?[0-9]{3}[\\s\\-]?[0-9]{2}[\\s\\-]?[0-9]{2}$';
 
-  public searchElementRef;
-
   // Social network select value
   public selectedValue = '';
 
-  public id = 2;
+  // Id in database for upload data
+  public id = 3;
+
+  // Flag, is showing the success of sending data
+  public isQuerySuccess = new EventEmitter<boolean>();
+
+  public userList: UserModel[];
+
+  @ViewChild('stepper')
+  public stepper;
 
   public createStepper() {
     this.firstFormGroup = this._formBuilder.group({
       name: new FormGroup({
-        firstName: new FormControl('', Validators.required),
-        lastName:  new FormControl('', Validators.required)
+        firstName: new FormControl('', [Validators.required]),
+        lastName:  new FormControl('', [Validators.required])
       }),
       nickname: new FormControl('', [Validators.required, Validators.minLength(8)]),
       birthday: new FormControl('', [Validators.required]),
     });
     this.secondFormGroup = this._formBuilder.group({
-      address: this._formBuilder.array([
-        this._initAddress()
-      ], [Validators.required])
+      address: this._formBuilder.array([this._formBuilder.control('')], [Validators.required])
     });
     this.thirdFormGroup = this._formBuilder.group({
       phone: new FormControl('', [Validators.required, Validators.pattern(this.phoneRegex)]),
       email: new FormControl('', [Validators.required, Validators.email, Validators.pattern(this.emailRegex)]),
-      typeSocNetworks: this._formBuilder.array([], [Validators.required]),
+      typeSocNetworks: this._formBuilder.array([''], [Validators.required]),
       socNetworks: new FormControl({value: '', disabled: true},
         [Validators.required, this.socialNetValidator.bind(this)]),
     });
@@ -74,7 +84,7 @@ export class StepperService {
     const fbPattern = new RegExp('^.*(?:facebook\\.com/|fb\\.me/).*$');
     const ghPattern = new RegExp('^.*(?:github\\.com/).*$');
 
-    if (this.selectedValue === undefined) {
+    if (!this.selectedValue) {
       return null;
     } else {
       if (this.selectedValue === 'Facebook') {
@@ -90,15 +100,15 @@ export class StepperService {
     const password = AC.get('password').value;
     const confirmPassword = AC.get('confirmPassword').value;
 
-    if (confirmPassword.length <= 0) {
-      return;
+    if (confirmPassword !== null) {
+      if (confirmPassword.length <= 0) {
+        return;
+      }
     }
 
     if (confirmPassword !== password) {
-      console.log('not valid');
       AC.get('confirmPassword').setErrors( {confirmValidator: true} );
     } else {
-      console.log('true');
       return;
     }
 
@@ -124,7 +134,7 @@ export class StepperService {
   }
 
   get addressControl() {
-    return this.secondFormGroup.get('address');
+    return this.secondFormGroup.get('address') as FormArray;
   }
 
   get phoneControl() {
@@ -180,7 +190,7 @@ export class StepperService {
   public getErorMessagePassword() {
     return this.passwordControl.hasError('required') ? 'You must enter a value' :
       this.passwordControl.hasError('minLength') ? '' :
-        'Not a valid nickname. Min length must be 5 symbols! ';
+        'Not a valid password. Min length must be 5 symbols! ';
   }
 
   public getErrorMessageConfirmPassword() {
@@ -191,15 +201,8 @@ export class StepperService {
 
   // <--------------- Add, Remove --------------->
 
-  private _initAddress() {
-    return this._formBuilder.group({
-      address: ['']
-    });
-  }
-
   public addAddress() {
-    const control = <FormArray>this.secondFormGroup.controls['address'];
-    control.push(this._initAddress());
+    this.addressControl.push(this._formBuilder.control(''));
   }
 
   public removeAddress(i: number) {
@@ -209,35 +212,61 @@ export class StepperService {
 
   // <--------------- Http queries --------------->
 
-  public getValues() {
-    this._http.get('http://localhost:3000/users').subscribe( (data) => {
-      console.log('data', data);
-    });
+  // Сonverting raw data into a model
+  public getValues(): Observable<UserModel[]> {
+    return this._http.get<UserModel[]>('http://localhost:3000/users')
+      .pipe(
+        map((response: any[]) => {
+          return response.map((el) => new UserModel(el));
+        }),
+        tap({
+          next: (userList: UserModel[]) => {
+            this.userList = userList.slice();
+          },
+          error: (error) => {
+            console.log(error);
+          },
+          complete: () => {}
+        })
+      );
   }
 
   public putValues() {
     // TODO: if form valid => http.post
-    this._http.post('http://localhost:3000/users/', {
-      id: this.id,
-      name: {
-        firstName: this.fNameControl.value,
-        lastName: this.lNameControl.value
-      },
-      nickname: this.nicknameControl.value,
-      birthday: this.birthdayControl.value,
-      address: this.addressControl.value,
-      phone: this.phoneControl.value,
-      email: this.emailControl.value,
-      socNetworks: this.socNetworksControl.value,
-      password: this.passwordControl.value,
-      confirmPassword: this.confirmPasswordControl.value
 
-    }).subscribe( (data) => {
-      this.id += 1;
-      console.log('POST request is successfull', data);
-    }, (error) => {
-      console.log('Query is not success! Error: ', error);
-    });
+    // const body = Object.assign({}, {id: this.id}, this.firstFormGroup.getRawValue())
+
+    return this._http
+      .post('http://localhost:3000/users/', {
+        id: this.id,
+        name: {
+          firstName: this.fNameControl.value,
+          lastName: this.lNameControl.value
+        },
+        nickname: this.nicknameControl.value,
+        birthday: this.birthdayControl.value,
+        address: this.addressControl.value,
+        phone: this.phoneControl.value,
+        email: this.emailControl.value,
+        socNetworks: this.socNetworksControl.value,
+        password: this.passwordControl.value,
+        confirmPassword: this.confirmPasswordControl.value
+      })
+      .pipe(
+        tap((data) => {
+          this.id += 1;
+          console.log('POST request is successfull', data);
+          this.isQuerySuccess.emit();
+        }, (error) => {
+          console.log('Query is not success! Error: ', error);
+        })
+      );
+  }
+
+  public resetForm(stepper: MatStepper) {
+    this.isQuerySuccess.subscribe(
+      stepper.reset()
+    );
   }
 
 }

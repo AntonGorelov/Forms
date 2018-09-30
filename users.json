@@ -1,6 +1,7 @@
 {
   "users": [
     {
+      "id": 0,
       "name": {
         "firstName": "Nina",
         "lastName": "Vladimirovna"
@@ -8,28 +9,31 @@
       "nickname": "NinaJ",
       "birthday": "05.08.95",
       "address": "339 Str div",
-      "phone": "8(900)9009090",
-      "email": "admin@admin.com",
-      "socNetworks": "",
-      "password": "",
-      "confirmPassword": ""
-    },
-    {
-      "name": {
-        "firstName": "Kirill",
-        "lastName": "S"
-      },
-      "nickname": "KirS",
-      "birthday": "02.10.94",
-      "address": "339 Str div",
-      "phone": "8(900)8008080",
-      "email": "admin@wis.com",
-      "socNetworks": "",
+      "phone": "+7(900)900-90-90",
+      "email": "nina@mmcs.sfedu.com",
+      "socNetworks": "github.com/Nina",
       "password": "",
       "confirmPassword": ""
     },
     {
       "id": 1,
+      "name": {
+        "firstName": "Kirill",
+        "lastName": "Vladimirovich"
+      },
+      "nickname": "KirS",
+      "birthday": "02.10.94",
+      "address": [
+        "339 Str div"
+      ],
+      "phone": "+7(988)800-80-80",
+      "email": "admin@wis.com",
+      "socNetworks": "github.com/KirillMacht",
+      "password": "",
+      "confirmPassword": ""
+    },
+    {
+      "id": 2,
       "name": {
         "firstName": "admin",
         "lastName": "admin"
@@ -37,11 +41,9 @@
       "nickname": "interestNickname",
       "birthday": "2018-09-16T21:00:00.000Z",
       "address": [
-        {
-          "address": ""
-        }
+        "Zorge"
       ],
-      "phone": "89009009090",
+      "phone": "+7(900)900-90-90",
       "email": "admin@wis.com",
       "socNetworks": "github.com/",
       "password": "aaaaaaa",
