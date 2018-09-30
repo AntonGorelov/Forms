@@ -179,7 +179,12 @@ export class StepperComponent implements OnInit {
   // <--------------- UI --------------->
 
   public openSnackBar() {
-    this.snackBar.open('User ' + this.fNameControl.value + ' successfully added!', 'OK!', {
+    this.isQuerySuccess.subscribe(
+      this.snackBar.open('User ' + this.fNameControl.value + ' successfully added!', 'OK!', {
+        duration: 1700
+      })
+    );
+    this.snackBar.open('User was not added', ':(', {
       duration: 1700
     });
   }

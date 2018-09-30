@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 // Material Modules
 import { MaterialModule } from './material.module';
@@ -33,6 +33,7 @@ import { TagInputModule } from 'ngx-chips';
 
 // Angular Google Maps
 import { AgmCoreModule } from '@agm/core';
+import {TokenInterceptor} from './token.interceptor';
 
 
 @NgModule({
@@ -71,7 +72,15 @@ import { AgmCoreModule } from '@agm/core';
     ModalBackdropComponent,
     ModalContainerComponent
   ],
-  providers: [FormService, StepperService],
+  providers: [
+    FormService,
+    StepperService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
