@@ -1,8 +1,8 @@
-import {EventEmitter, Injectable, Output, ViewChild} from '@angular/core';
+import { EventEmitter, Injectable, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators, FormBuilder, AbstractControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatStepper } from '@angular/material';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { UserModel } from '../models';
@@ -11,8 +11,10 @@ import { UserModel } from '../models';
 @Injectable()
 export class StepperService {
 
-  constructor(private _formBuilder: FormBuilder,
-              private _http: HttpClient) {}
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _http: HttpClient
+  ) {}
 
   public firstFormGroup: FormGroup;
   public secondFormGroup: FormGroup;
@@ -30,12 +32,14 @@ export class StepperService {
   public selectedValue = '';
 
   // Id in database for upload data
-  public id = 3;
+  public id = 6;
 
   // Flag, is showing the success of sending data
   public isQuerySuccess = new EventEmitter<boolean>();
 
   public userList: UserModel[];
+
+  public userInfo: UserModel;
 
   @ViewChild('stepper')
   public stepper;
@@ -65,22 +69,13 @@ export class StepperService {
     }, { validator: this.confirmValidator.bind(this)});
   }
 
-  public onSubmit() {
-    if (this._formBuilder.group(this.firstFormGroup).valid && this._formBuilder.group(this.secondFormGroup).valid &&
-      this._formBuilder.group(this.thirdFormGroup).valid && this._formBuilder.group(this.fourthFormGroup).valid) {
-      console.log('StepperService data: ',
-        this.firstFormGroup.value,
-        this.secondFormGroup.value,
-        this.thirdFormGroup.value,
-        this.fourthFormGroup.value);
-    }
-  }
+  public onSubmit() {}
 
   // <--------------- Validators --------------->
 
   public socialNetValidator(control: FormControl): {[key: string]: any} {
     const value = control.value;
-    const vkPattern = new RegExp('/^(http[s]?:\\/\\/){0,1}(www\\.){0,1}[vk.com-]+\\.[a-zA-Z]{2,5}[\\.]{0,1}/');
+    // const vkPattern = new RegExp('/^(http[s]?:\\/\\/){0,1}(www\\.){0,1}[vk.com-]+\\.[a-zA-Z]{2,5}[\\.]{0,1}/');
     const fbPattern = new RegExp('^.*(?:facebook\\.com/|fb\\.me/).*$');
     const ghPattern = new RegExp('^.*(?:github\\.com/).*$');
 
@@ -232,8 +227,6 @@ export class StepperService {
   }
 
   public putValues() {
-    // TODO: if form valid => http.post
-
     // const body = Object.assign({}, {id: this.id}, this.firstFormGroup.getRawValue())
 
     return this._http
@@ -261,6 +254,32 @@ export class StepperService {
           console.log('Query is not success! Error: ', error);
         })
       );
+  }
+
+  // <--------------- Change user data --------------->
+
+  public updateUser(user: UserModel) {
+    return this._http.put('http://localhost:3000/users/' + this.userInfo.id, user);
+  }
+
+  public deleteUser(id: number) {
+    return this._http.delete('http://localhost:3000/users/' + id);
+  }
+
+  private _handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.log('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.log(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Form is invalid! You must fill and try again!');
   }
 
   public resetForm(stepper: MatStepper) {

@@ -1,10 +1,10 @@
-import {AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
 import { StepperService } from '../../services';
 import { MapsAPILoader } from '@agm/core';
 import {} from '@types/googlemaps';
-import { } from 'googlemaps';
-import {Subject} from 'rxjs';
-import {debounceTime, tap} from 'rxjs/operators';
+import {} from 'googlemaps';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 declare var google: any;
 
 
@@ -85,7 +85,7 @@ export class AddressComponent implements OnInit, AfterViewInit {
       });
   }
 
-  private setCurrentPosition() {
+  private _setCurrentPosition() {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;

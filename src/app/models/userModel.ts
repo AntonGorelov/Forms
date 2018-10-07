@@ -1,4 +1,5 @@
 export class UserModel {
+  public id: number;
   public name: {firstName: string, lastName: string};
   public nickname: string;
   public birthday: string;
@@ -10,6 +11,7 @@ export class UserModel {
   public confirmPassword: string;
 
   constructor(data: any = {}) {
+    this.id = data.id || void 0;
     this.name = data.name || void 0;
     this.nickname = data.nickname || void 0;
     this.birthday = data.birthday || void 0;

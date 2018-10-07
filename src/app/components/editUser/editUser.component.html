@@ -1,0 +1,58 @@
+<mat-card>
+  <mat-card-content class="mat-card-content" *ngIf="editForm">
+    <form class="mat-form" novalidate [formGroup]="editForm">
+
+      <h1 class="content-firstname">Edit {{userInfo.name.firstName}} user</h1>
+
+      <div class="name" formGroupName="name">
+        <mat-form-field>
+          <input matInput placeholder="First name" formControlName="firstName">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Last name" formControlName="lastName">
+        </mat-form-field>
+      </div>
+
+      <!--<mat-form-field>-->
+        <!--<input matInput placeholder="Nickname" formControlName="nickname">-->
+      <!--</mat-form-field>-->
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="dp" [max]="date" placeholder="Birthday" formControlName="birthday" name="birthday">
+        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp></mat-datepicker>
+      </mat-form-field>
+
+      <!--<mat-form-field>-->
+        <!--<input matInput placeholder="Address" formControlName="address">-->
+      <!--</mat-form-field>-->
+
+      <mat-form-field>
+        <input matInput placeholder="Phone: +7(___)___-____" formControlName="phone" mask="+7(000)000-0000">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Social Networks" formControlName="socNetworks">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Password" formControlName="password">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Confirm password" formControlName="confirmPassword">
+      </mat-form-field>
+
+      <div class="mat-form-buttons">
+        <button mat-raised-button color="primary" type="submit" (click)="updateUser()">Update</button>
+        <button mat-raised-button color="warn" type="submit" (click)="deleteUser(userInfo)">Delete</button>
+      </div>
+
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -18,7 +18,8 @@ import {
   CardAnswerDialogComponent,
   CardAnswerDialogBootstrapComponent,
   StepperComponent,
-  AddressComponent
+  AddressComponent,
+  EditUserComponent
 } from './components';
 import { AppRoutingModule } from './app.routing.module';
 import { InputMaskDirective } from './directives';
@@ -33,7 +34,9 @@ import { TagInputModule } from 'ngx-chips';
 
 // Angular Google Maps
 import { AgmCoreModule } from '@agm/core';
-import {TokenInterceptor} from './token.interceptor';
+
+// Interceptors
+import { TokenInterceptor } from './token.interceptor';
 
 
 @NgModule({
@@ -48,7 +51,8 @@ import {TokenInterceptor} from './token.interceptor';
     ModalBackdropComponent,
     ModalContainerComponent,
     StepperComponent,
-    AddressComponent
+    AddressComponent,
+    EditUserComponent
   ],
   imports: [
     BrowserModule,

@@ -84,6 +84,7 @@
               <mat-select placeholder="Social network"
                           [(value)]="selected"
                           [ngClass]="selected"
+                          [required]="true"
                           (selectionChange)="selectValue($event)"
                           formArrayName="typeSocNetworks">
                 <mat-select-trigger>
@@ -201,8 +202,15 @@
       </ng-container>
 
       <ng-container matColumnDef="Social Net">
-        <th mat-header-cell *matHeaderCellDef> Social Net </th>
+        <th mat-header-cell *matHeaderCellDef> Social Networks </th>
         <td mat-cell *matCellDef="let user"> {{user.socNetworks}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let user">
+          <button mat-raised-button color="accent" (click)="userInfClick(user)">Edit</button>
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

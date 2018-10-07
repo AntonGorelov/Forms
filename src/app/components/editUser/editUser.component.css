@@ -1,0 +1,22 @@
+.mat-card-content {
+  margin: 14px 0px;
+}
+.mat-card-all-value {
+  margin: 10px 0px !important;
+}
+.mat-card-content-value {
+  font-weight: bold;
+}
+.mat-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: auto;
+}
+.content-firstname {
+  padding: 7px 0px;
+}
+.mat-form-buttons {
+  display: flex;
+  justify-content: space-between;
+}

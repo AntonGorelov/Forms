@@ -4,6 +4,7 @@ import { debounceTime, take } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 
 import { StepperService } from '../../services';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -36,13 +37,16 @@ export class StepperComponent implements OnInit {
   public users: any;
 
   // Columns in result table
-  public displayedColumns: string[] = ['First Name', 'Last Name', 'Nickname', 'Birthday', 'Address', 'Phone', 'Email', 'Social Net'];
+  public displayedColumns: string[] =
+    ['First Name', 'Last Name', 'Nickname', 'Birthday', 'Address', 'Phone', 'Email', 'Social Net', 'Action'];
 
   // Flag for view table on the page
   public isQuerySuccess = this._stepperService.isQuerySuccess;
 
-  constructor(private _stepperService: StepperService,
-              public snackBar: MatSnackBar) {}
+  constructor(
+    private _stepperService: StepperService,
+    public snackBar: MatSnackBar, private _router: Router
+  ) {}
 
   // <--------------- Get values --------------->
 
@@ -184,9 +188,15 @@ export class StepperComponent implements OnInit {
         duration: 1700
       })
     );
-    this.snackBar.open('User was not added', ':(', {
-      duration: 1700
-    });
+    // this.snackBar.open('User was not added', ':(', {
+    //   duration: 1700
+    // });
+  }
+
+  public userInfClick(user) {
+    console.log('user', user);
+    this._router.navigate(['stepper/' + user.id + '/edit']);
+    this._stepperService.userInfo = user;
   }
 
 }
