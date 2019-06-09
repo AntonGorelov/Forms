@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormControl, Validators } from '@angular/forms';
 
 import { FormService } from '../../services';
 import { CardAnswerDialogBootstrapComponent } from '../cardAnswerDialogBootstrap';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { FormArray, FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -25,63 +25,58 @@ export class FormBootstrapComponent implements OnInit {
   // Max date for limit date in datepicker
   public date = this.formService.date;
 
-  bsModalRef: BsModalRef;
+  public bsModalRef: BsModalRef;
 
-  constructor(public formService: FormService, private _modalService: BsModalService) {}
+  constructor(
+      public formService: FormService,
+      private _modalService: BsModalService
+  ) {}
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createNewForm();
-
-    // this.hobbyFormControl.valueChanges
-    //   .pipe(
-    //     debounceTime(250)
-    //   )
-    //   .subscribe(() => {
-    //
-    //   });
   }
 
-  public createNewForm() {
+  public createNewForm(): void  {
     this.formService.createNewForm();
   }
 
-  get cardForm() {
+  public get cardForm() {
     return this.formService.cardForm;
   }
 
-  get fNameControl() {
+  public get fNameControl() {
     return this.cardForm.get('name.firstName');
   }
 
-  get lNameControl() {
+  public get lNameControl() {
     return this.cardForm.get('name.lastName');
   }
 
-  get emailControl() {
+  public get emailControl() {
     return this.cardForm.get('email');
   }
 
-  get phoneControl() {
+  public get phoneControl() {
     return this.cardForm.get('phone');
   }
 
-  get nicknameControl() {
+  public get nicknameControl() {
     return this.cardForm.get('nickname');
   }
 
-  get birthdayControl() {
+  public get birthdayControl() {
     return this.cardForm.get('birthday');
   }
 
-  get hobbyFormControl() {
+  public get hobbyFormControl() {
     return this.cardForm.get('hobbyVal.hobbyFormControl');
   }
 
-  get sexControl() {
+  public get sexControl() {
     return this.cardForm.get('sex');
   }
 
-  get noteControl() {
+  public get noteControl() {
     return this.cardForm.get('note');
   }
 
@@ -97,7 +92,7 @@ export class FormBootstrapComponent implements OnInit {
     return this.formService.getErrorMessageNickname();
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     if (this.cardForm.valid) {
       this.isValid = true;
     }
@@ -105,11 +100,11 @@ export class FormBootstrapComponent implements OnInit {
 
   // <--------------- Chips --------------->
 
-  public temp(value) {
+  public temp(value): FormControl {
     return new FormControl(value, Validators.minLength(7));
   }
 
-  public addHobby(event) {
+  public addHobby(event): void {
     const input = event.input;
     const value = event.value;
     if ((value || '').trim()) {
@@ -124,7 +119,7 @@ export class FormBootstrapComponent implements OnInit {
     }
   }
 
-  public valuesHobby() {
+  public valuesHobby(): void {
     this.hobbies = [];
 
     for (let i = 0; i < this.cardForm.get('hobbyVal').value.hobbyArray.length; i++) {
@@ -133,7 +128,7 @@ export class FormBootstrapComponent implements OnInit {
     this.formService.hobbies = this.hobbies;
   }
 
-  public removeHobby(event) {
+  public removeHobby(event): void {
     (<FormArray>this.cardForm.get('hobbyVal')).value.hobbyArray.splice(event);
     const index = this.hobbies.indexOf(event);
 
@@ -146,8 +141,7 @@ export class FormBootstrapComponent implements OnInit {
 
   // <--------------- Dialog --------------->
 
-  public openCardAnswerDialog() {
-    console.log(this.cardForm.controls.hobbyVal.value.hobbyFormControl);
+  public openCardAnswerDialog(): void {
     const initialState = {
       title: 'Card answer'
     };

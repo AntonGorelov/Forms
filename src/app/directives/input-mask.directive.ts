@@ -25,8 +25,10 @@ export class InputMaskDirective implements OnInit {
 
   private state: State;
 
-  @Input() mask: any;
-  @Output() ngModelChange = new EventEmitter();
+  @Input()
+  public mask: any;
+  @Output()
+  public ngModelChange = new EventEmitter();
 
   constructor(private element: ElementRef) {
     this.state = {

@@ -1,10 +1,17 @@
+// ANGULAR
 import { AfterViewInit, Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+
+// RXJS
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
+// SERVICES
 import { StepperService } from '../../services';
+
+// MAPS
 import { MapsAPILoader } from '@agm/core';
 import {} from '@types/googlemaps';
 import {} from 'googlemaps';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 declare var google: any;
 
 
@@ -41,11 +48,13 @@ export class AddressComponent implements OnInit, AfterViewInit {
   @ViewChild('search')
   public searchElementRef: ElementRef;
 
-  constructor(private _stepperService: StepperService,
-              private _mapsAPILoader: MapsAPILoader,
-              private _ngZone: NgZone) {}
+  constructor(
+      private _stepperService: StepperService,
+      private _mapsAPILoader: MapsAPILoader,
+      private _ngZone: NgZone
+  ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     // this.setCurrentPosition();
 
     this._autocompleteSubject$
@@ -70,11 +79,11 @@ export class AddressComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     // this.initAutocomplete();
   }
 
-  public initAutocomplete() {
+  public initAutocomplete(): void {
     this._mapsAPILoader.load()
       .then(() => {
         const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
@@ -85,7 +94,7 @@ export class AddressComponent implements OnInit, AfterViewInit {
       });
   }
 
-  private _setCurrentPosition() {
+  private _setCurrentPosition(): void {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;
@@ -96,7 +105,7 @@ export class AddressComponent implements OnInit, AfterViewInit {
 
   // <--------------- Handlers --------------->
 
-  public mapClicked($event: any) {
+  public mapClicked($event: any): void {
     const newMarker = {
       name: 'Untitled',
       lat: $event.coords.lat,
@@ -104,10 +113,6 @@ export class AddressComponent implements OnInit, AfterViewInit {
       draggable: false
     };
     this.markers.push(newMarker);
-  }
-
-  public markerDragEnd(marker: any, $event: any) {
-    console.log('marker:', marker, ' ; event: ', $event);
   }
 
 }

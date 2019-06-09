@@ -1,7 +1,10 @@
+// ANGULAR
 import { EventEmitter, Injectable, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatStepper } from '@angular/material';
+
+// RXJS
 import { Observable, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
@@ -44,7 +47,7 @@ export class StepperService {
   @ViewChild('stepper')
   public stepper;
 
-  public createStepper() {
+  public createStepper(): void {
     this.firstFormGroup = this._formBuilder.group({
       name: new FormGroup({
         firstName: new FormControl('', [Validators.required]),
@@ -69,13 +72,12 @@ export class StepperService {
     }, { validator: this.confirmValidator.bind(this)});
   }
 
-  public onSubmit() {}
+  public onSubmit(): void {}
 
   // <--------------- Validators --------------->
 
   public socialNetValidator(control: FormControl): {[key: string]: any} {
     const value = control.value;
-    // const vkPattern = new RegExp('/^(http[s]?:\\/\\/){0,1}(www\\.){0,1}[vk.com-]+\\.[a-zA-Z]{2,5}[\\.]{0,1}/');
     const fbPattern = new RegExp('^.*(?:facebook\\.com/|fb\\.me/).*$');
     const ghPattern = new RegExp('^.*(?:github\\.com/).*$');
 
@@ -91,7 +93,7 @@ export class StepperService {
     }
   }
 
-  public confirmValidator(AC: AbstractControl) {
+  public confirmValidator(AC: AbstractControl): void {
     const password = AC.get('password').value;
     const confirmPassword = AC.get('confirmPassword').value;
 
@@ -112,83 +114,83 @@ export class StepperService {
 
   // <--------------- Get values --------------->
 
-  get fNameControl() {
+  public get fNameControl(): AbstractControl {
     return this.firstFormGroup.get('name.firstName');
   }
 
-  get lNameControl() {
+  public get lNameControl(): AbstractControl {
     return this.firstFormGroup.get('name.lastName');
   }
 
-  get nicknameControl() {
+  public get nicknameControl(): AbstractControl {
     return this.firstFormGroup.get('nickname');
   }
 
-  get birthdayControl() {
+  public get birthdayControl(): AbstractControl {
     return this.firstFormGroup.get('birthday');
   }
 
-  get addressControl() {
-    return this.secondFormGroup.get('address') as FormArray;
+  public get addressControl(): FormArray {
+    return <FormArray>this.secondFormGroup.get('address');
   }
 
-  get phoneControl() {
+  public get phoneControl(): AbstractControl {
     return this.thirdFormGroup.get('phone');
   }
 
-  get emailControl() {
+  public get emailControl(): AbstractControl {
     return this.thirdFormGroup.get('email');
   }
 
-  get typeSocNetworksControl() {
+  public get typeSocNetworksControl(): AbstractControl {
     return this.thirdFormGroup.get('typeSocNetworks');
   }
 
-  get socNetworksControl() {
+  public get socNetworksControl(): AbstractControl {
     return this.thirdFormGroup.get('socNetworks');
   }
 
-  get passwordControl() {
+  public get passwordControl(): AbstractControl {
     return this.fourthFormGroup.get('password');
   }
 
-  get confirmPasswordControl() {
+  public get confirmPasswordControl(): AbstractControl {
     return this.fourthFormGroup.get('confirmPassword');
   }
 
   // <--------------- Error Handlers --------------->
 
-  public getErrorMessageEmail() {
+  public getErrorMessageEmail(): string {
     if (this.emailControl.hasError('required')) { return 'You must enter a value'; }
     if (this.emailControl.hasError('email')) { return 'Not a valid email. Email must be contains @!'; }
     if (this.emailControl.hasError('pattern')) { return 'Not a valid email. Email must be contains .com or .ru domains!'; }
   }
 
-  public getErrorMessagePhone() {
+  public getErrorMessagePhone(): string {
     return this.phoneControl.hasError('required') ? 'You must enter a value' :
       this.phoneControl.hasError('pattern') ? 'Not a valid phone. Input your russian number, please!' :
         '';
   }
 
-  public getErrorMessageNickname() {
+  public getErrorMessageNickname(): string {
     return this.nicknameControl.hasError('required') ? 'You must enter a value' :
       this.nicknameControl.hasError('minLength') ? '' :
         'Not a valid nickname. Min length must be 8 symbols! ';
   }
 
-  public getErrorMessageSocialNetworks() {
+  public getErrorMessageSocialNetworks(): string {
     return this.socNetworksControl.hasError('facebook') ? 'Not a valid facebook network!' :
       this.socNetworksControl.hasError('socialNetValidator') ? '' :
         'Not a valid github network!';
   }
 
-  public getErorMessagePassword() {
+  public getErorMessagePassword(): string {
     return this.passwordControl.hasError('required') ? 'You must enter a value' :
       this.passwordControl.hasError('minLength') ? '' :
         'Not a valid password. Min length must be 5 symbols! ';
   }
 
-  public getErrorMessageConfirmPassword() {
+  public getErrorMessageConfirmPassword(): string {
     return this.confirmPasswordControl.hasError('required') ? 'You must enter a value' :
       this.confirmPasswordControl.hasError('confirmValidator') ? 'Passwords dont match! You must enter same passwords!' :
       '';
@@ -196,11 +198,11 @@ export class StepperService {
 
   // <--------------- Add, Remove --------------->
 
-  public addAddress() {
+  public addAddress(): void {
     this.addressControl.push(this._formBuilder.control(''));
   }
 
-  public removeAddress(i: number) {
+  public removeAddress(i: number): void {
     const control = <FormArray>this.secondFormGroup.controls['address'];
     control.removeAt(i);
   }
@@ -226,7 +228,7 @@ export class StepperService {
       );
   }
 
-  public putValues() {
+  public putValues(): Observable<UserModel> {
     // const body = Object.assign({}, {id: this.id}, this.firstFormGroup.getRawValue())
 
     return this._http
@@ -246,7 +248,7 @@ export class StepperService {
         confirmPassword: this.confirmPasswordControl.value
       })
       .pipe(
-        tap((data) => {
+        tap((data: UserModel) => {
           this.id += 1;
           console.log('POST request is successfull', data);
           this.isQuerySuccess.emit();
@@ -258,15 +260,15 @@ export class StepperService {
 
   // <--------------- Change user data --------------->
 
-  public updateUser(user: UserModel) {
+  public updateUser(user: UserModel): Observable<any> {
     return this._http.put('http://localhost:3000/users/' + this.userInfo.id, user);
   }
 
-  public deleteUser(id: number) {
+  public deleteUser(id: number): Observable<any> {
     return this._http.delete('http://localhost:3000/users/' + id);
   }
 
-  private _handleError(error: HttpErrorResponse) {
+  private _handleError(error: HttpErrorResponse): any {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
       console.log('An error occurred:', error.error.message);
@@ -282,7 +284,7 @@ export class StepperService {
       'Form is invalid! You must fill and try again!');
   }
 
-  public resetForm(stepper: MatStepper) {
+  public resetForm(stepper: MatStepper): void {
     this.isQuerySuccess.subscribe(
       stepper.reset()
     );

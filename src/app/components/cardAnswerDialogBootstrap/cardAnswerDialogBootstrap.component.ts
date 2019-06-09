@@ -23,9 +23,12 @@ export class CardAnswerDialogBootstrapComponent implements OnInit {
   public sex;
   public note;
 
-  constructor(public bsModalRef: BsModalRef, private _formService: FormService) {}
+  constructor(
+      public bsModalRef: BsModalRef,
+      private _formService: FormService
+  ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.fName = this._formService.cardForm.value.name.firstName;
     this.lName = this._formService.cardForm.value.name.lastName;
     this.email = this._formService.cardForm.value.email;

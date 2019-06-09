@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { Subject } from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
 
 import { StepperService } from '../../services';
 import { UserModel } from '../../models';
@@ -12,7 +14,7 @@ import { UserModel } from '../../models';
   templateUrl: './editUser.component.html',
   styleUrls: ['./editUser.component.css']
 })
-export class EditUserComponent implements OnInit {
+export class EditUserComponent implements OnInit, OnDestroy {
 
   // Main FormGroup name
   public editForm: FormGroup;
@@ -28,13 +30,15 @@ export class EditUserComponent implements OnInit {
 
   public userList = this._stepperService.userList;
 
+  private _destroy$ = new Subject<void>();
+
   constructor (
     private _stepperService: StepperService,
     private _router: Router,
     private _formBuilder: FormBuilder
   ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     if (!this.userInfo) {
       alert('User information not load!');
       this._router.navigate(['stepper']);
@@ -56,9 +60,17 @@ export class EditUserComponent implements OnInit {
     }
   }
 
-  public updateUser() {
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
+  public updateUser(): void {
     this._stepperService.updateUser(this.editForm.value)
-      .pipe(first())
+      .pipe(
+          first(),
+          takeUntil(this._destroy$),
+      )
       .subscribe(
         () => {
           this._router.navigate(['stepper']);
@@ -69,13 +81,58 @@ export class EditUserComponent implements OnInit {
       );
   }
 
-  public deleteUser(user: UserModel) {
+  public deleteUser(user: UserModel): void {
     this._stepperService.deleteUser(user.id)
-      .subscribe(
+        .pipe(
+            takeUntil(this._destroy$),
+        )
+        .subscribe(
         () => {
           this.userList.filter((u) => u !== user);
           this._router.navigate(['stepper']);
         }
       );
+  }
+
+  // <--------------- Get values --------------->
+
+  public get fNameControl(): AbstractControl {
+    return this.editForm.get('name.firstName');
+  }
+
+  public get lNameControl(): AbstractControl {
+    return this.editForm.get('name.lastName');
+  }
+
+  public get nicknameControl(): AbstractControl {
+    return this.editForm.get('nickname');
+  }
+
+  public get birthdayControl(): AbstractControl {
+    return this.editForm.get('birthday');
+  }
+
+  public get addressControl(): AbstractControl {
+    return this.editForm.get('address');
+  }
+
+  public get phoneControl(): AbstractControl {
+    return this.editForm.get('phone');
+  }
+
+  public get emailControl(): AbstractControl {
+    return this.editForm.get('email');
+  }
+
+  public get socNetworksControl(): AbstractControl {
+    return this.editForm.get('socNetworks');
+  }
+
+  public get passwordControl(): AbstractControl {
+    return this.editForm.get('password');
+  }
+
+  public get confirmPasswordControl(): AbstractControl {
+    return this.editForm.get('confirmPassword');
   }
 }

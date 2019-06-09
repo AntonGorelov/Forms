@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, Validators} from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent, MatDialog, MatDialogRef } from '@angular/material';
+
 import { FormService } from '../../services';
 import { CardAnswerDialogComponent } from '../cardAnswerDialog';
 
@@ -23,93 +24,93 @@ export class FormComponent implements OnInit {
   public selectable = true;
   public removable = true;
   public addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  public readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  matcher = new ErrorStateMatcher();
+  public matcher = new ErrorStateMatcher();
 
-  cardAnswerDialogRef: MatDialogRef<CardAnswerDialogComponent>;
+  public cardAnswerDialogRef: MatDialogRef<CardAnswerDialogComponent>;
 
   constructor(public formService: FormService, private _matDialog: MatDialog) {}
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createNewForm();
   }
 
-  public createNewForm() {
+  public createNewForm(): void {
     this.formService.createNewForm();
   }
 
-  get cardForm() {
+  public get cardForm(): FormGroup {
     return this.formService.cardForm;
   }
 
-  get fNameControl() {
+  public get fNameControl(): AbstractControl {
     return this.cardForm.get('name.firstName');
   }
 
-  get lNameControl() {
+  public get lNameControl(): AbstractControl {
     return this.cardForm.get('name.lastName');
   }
 
-  get emailControl() {
+  public get emailControl(): AbstractControl {
     return this.cardForm.get('email');
   }
 
-  get phoneControl() {
+  public get phoneControl(): AbstractControl {
     return this.cardForm.get('phone');
   }
 
-  get nicknameControl() {
+  public get nicknameControl(): AbstractControl {
     return this.cardForm.get('nickname');
   }
 
-  get birthdayControl() {
+  public get birthdayControl(): AbstractControl {
     return this.cardForm.get('birthday');
   }
 
-  get hobbyControl() {
+  public get hobbyControl(): AbstractControl {
     return this.cardForm.get('hobbyVal.hobbyFormControl');
   }
 
-  get hobbyArray() {
+  public get hobbyArray(): AbstractControl {
     return this.cardForm.get('hobbyVal.hobbyFormArray');
   }
 
-  get sexControl() {
+  public get sexControl(): AbstractControl {
     return this.cardForm.get('sex');
   }
 
-  get noteControl() {
+  public get noteControl(): AbstractControl {
     return this.cardForm.get('note');
   }
 
-  public getErrorMessageEmail() {
+  public getErrorMessageEmail(): string {
     return this.formService.getErrorMessageEmail();
   }
 
-  public getErrorMessagePhone() {
+  public getErrorMessagePhone(): string {
     return this.formService.getErrorMessagePhone();
   }
 
-  public getErrorMessageNickname() {
+  public getErrorMessageNickname(): string {
     return this.formService.getErrorMessageNickname();
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     this.formService.onSubmit();
   }
 
-  public clearForm() {
+  public clearForm(): void {
     return this.formService.clearForm();
   }
 
   // <--------------- Chips --------------->
 
-  public temp(value) {
+  public temp(value): FormControl {
     return new FormControl(value, Validators.minLength(7));
   }
 
-  public addHobby(event: MatChipInputEvent) {
+  public addHobby(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
     if ((value || '').trim()) {
@@ -120,7 +121,7 @@ export class FormComponent implements OnInit {
     }
   }
 
-  public valuesHobby() {
+  public valuesHobby(): void {
     this.hobbies = [];
 
     for (let i = 0; i < this.cardForm.get('hobbyVal').value.hobbyArray.length; i++) {
@@ -129,7 +130,7 @@ export class FormComponent implements OnInit {
     this.formService.hobbies = this.hobbies;
   }
 
-  public removeHobby(i: number) {
+  public removeHobby(i: number): void {
     (<FormArray>this.cardForm.get('hobbyVal')).value.hobbyArray.splice(i, 1);
     this.hobbies.splice(i, 1);
     this.formService.hobbies = this.hobbies;
@@ -137,7 +138,7 @@ export class FormComponent implements OnInit {
 
   // <--------------- Dialog --------------->
 
-  public openCardAnswerDialog() {
+  public openCardAnswerDialog(): void {
     this.cardAnswerDialogRef = this._matDialog.open(CardAnswerDialogComponent, {
       width: '390px',
       data: {

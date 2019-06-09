@@ -4,7 +4,8 @@ import {
   FormControl,
   Validators,
   FormArray,
-  ValidatorFn
+  ValidatorFn,
+  AbstractControl,
 } from '@angular/forms';
 
 
@@ -24,7 +25,7 @@ export class FormService {
   public date = new Date();
   public maxDate = this.date.setDate(this.date.getDate() - 1);
 
-  public createNewForm() {
+  public createNewForm(): void {
     this.cardForm = new FormGroup({
       name: new FormGroup({
         firstName: new FormControl('', Validators.required),
@@ -43,53 +44,53 @@ export class FormService {
     });
   }
 
-  get emailControl() {
+  public get emailControl(): AbstractControl {
     return this.cardForm.get('email');
   }
 
-  get phoneControl() {
+  public get phoneControl(): AbstractControl {
     return this.cardForm.get('phone');
   }
 
-  get nicknameControl() {
+  public get nicknameControl(): AbstractControl {
     return this.cardForm.get('nickname');
   }
 
-  get hobbyControl() {
+  public get hobbyControl(): AbstractControl {
     return this.cardForm.get('hobbyVal.hobbyFormControl');
   }
 
-  get hobbyArray() {
+  public get hobbyArray(): AbstractControl {
     return this.cardForm.get('hobbyVal.hobbyArray');
   }
 
   // <--------------- Error Handlers --------------->
 
-  public getErrorMessageEmail() {
+  public getErrorMessageEmail(): string {
     if (this.emailControl.hasError('required')) { return 'You must enter a value'; }
     if (this.emailControl.hasError('email')) { return 'Not a valid email. Email must be contains @!'; }
     if (this.emailControl.hasError('pattern')) { return 'Not a valid email. Email must be contains .com or .ru domains!'; }
   }
 
-  public getErrorMessagePhone() {
+  public getErrorMessagePhone(): string {
     return this.phoneControl.hasError('required') ? 'You must enter a value' :
       this.phoneControl.hasError('pattern') ? 'Not a valid phone. Input your russian number, please!' :
         '';
   }
 
-  public getErrorMessageNickname() {
+  public getErrorMessageNickname(): string {
     return this.nicknameControl.hasError('required') ? 'You must enter a value' :
       this.nicknameControl.hasError('minLength') ? '' :
         'Not a valid nickname. Min length must be 8 symbols! ';
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     if (this.cardForm.valid) {
       console.log('FormService data: ', this.cardForm.controls);
     }
   }
 
-  public clearForm() {
+  public clearForm(): void {
     this.cardForm.reset();
   }
 

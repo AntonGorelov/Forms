@@ -8,8 +8,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 })
 export class CardAnswerDialogComponent implements OnInit {
 
-  constructor(private dialogRef: MatDialogRef<CardAnswerDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private _data) {}
+  constructor(
+      private dialogRef: MatDialogRef<CardAnswerDialogComponent>,
+      @Inject(MAT_DIALOG_DATA)
+      private _data
+  ) {}
 
   public fName;
   public lName;
@@ -22,7 +25,7 @@ export class CardAnswerDialogComponent implements OnInit {
   public note;
 
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.fName = this._data.fName;
     this.lName = this._data.lName;
     this.email = this._data.email;

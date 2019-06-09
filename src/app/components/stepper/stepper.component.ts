@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 import { StepperService } from '../../services';
-import { Router } from '@angular/router';
+import {UserModel} from '../../models';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class StepperComponent implements OnInit {
   public selectedValue = '';
 
   // List of users in database
-  public users: any;
+  public users: UserModel[];
 
   // Columns in result table
   public displayedColumns: string[] =
@@ -45,61 +46,62 @@ export class StepperComponent implements OnInit {
 
   constructor(
     private _stepperService: StepperService,
-    public snackBar: MatSnackBar, private _router: Router
+    public snackBar: MatSnackBar,
+    private _router: Router
   ) {}
 
   // <--------------- Get values --------------->
 
-  get fNameControl() {
+  public get fNameControl() {
     return this._stepperService.fNameControl;
   }
 
-  get lNameControl() {
+  public get lNameControl() {
     return this._stepperService.lNameControl;
   }
 
-  get nicknameControl() {
+  public get nicknameControl() {
     return this._stepperService.nicknameControl;
   }
 
-  get birthdayControl() {
+  public get birthdayControl() {
     return this._stepperService.birthdayControl;
   }
 
   // Max date for limit date in datepicker
-  get dateControl() {
+  public get dateControl() {
     return this._stepperService.date;
   }
 
-  get addressControl() {
+  public get addressControl() {
     return this._stepperService.addressControl;
   }
 
-  get phoneControl() {
+  public get phoneControl() {
     return this._stepperService.phoneControl;
   }
 
-  get emailControl() {
-    return this._stepperService.phoneControl;
+  public get emailControl() {
+    return this._stepperService.emailControl;
   }
 
-  get typeSocNetworksControl() {
+  public get typeSocNetworksControl() {
     return this._stepperService.typeSocNetworksControl;
   }
 
-  get socNetworksControl() {
+  public get socNetworksControl() {
     return this._stepperService.socNetworksControl;
   }
 
-  get passwordControl() {
+  public get passwordControl() {
     return this._stepperService.passwordControl;
   }
 
-  get confirmPasswordControl() {
+  public get confirmPasswordControl() {
     return this._stepperService.confirmPasswordControl;
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this._stepperService.createStepper();
     this.firstFormGroup = this._stepperService.firstFormGroup;
     this.secondFormGroup = this._stepperService.secondFormGroup;
@@ -117,51 +119,51 @@ export class StepperComponent implements OnInit {
 
   // <--------------- Error Handlers --------------->
 
-  getErrorMessageNickname() {
+  public getErrorMessageNickname(): string {
     return this._stepperService.getErrorMessageNickname();
   }
 
-  getErrorMessagePhone() {
+  public getErrorMessagePhone(): string {
     return this._stepperService.getErrorMessagePhone();
   }
 
-  getErrorMessageEmail() {
+  public getErrorMessageEmail(): string {
     return this._stepperService.getErrorMessageEmail();
   }
 
-  getErrorMessageSocialNetworks() {
+  public getErrorMessageSocialNetworks(): string {
     return this._stepperService.getErrorMessageSocialNetworks();
   }
 
-  getErrorMessagePassword() {
+  public getErrorMessagePassword(): string {
     return this._stepperService.getErorMessagePassword();
   }
 
-  getErrorMessageConfirmPassword() {
+  public getErrorMessageConfirmPassword(): string {
     return this._stepperService.getErrorMessageConfirmPassword();
   }
 
-  public addAddress() {
+  public addAddress(): void {
     this._stepperService.addAddress();
   }
 
-  public removeAddress(i: number) {
+  public removeAddress(i: number): void {
     this._stepperService.removeAddress(i);
   }
 
-  public selectValue(event) {
+  public selectValue(event): void {
     this.selectedValue = event.value;
     this.thirdFormGroup.controls.socNetworks.enable();
     this._stepperService.selectedValue = this.selectedValue;
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     this._stepperService.onSubmit();
   }
 
   // <--------------- Http queries --------------->
 
-  public getValues() {
+  public getValues(): void {
     // take(1) = use only one subscription
     this._stepperService.getValues().pipe(take(1)).subscribe(
       (userList) => {
@@ -170,31 +172,27 @@ export class StepperComponent implements OnInit {
     );
   }
 
-  public putValues() {
+  public putValues(): void {
     this._stepperService.putValues().subscribe(() => {
       this.getValues();
     });
   }
 
-  public resetForm(stepper) {
+  public resetForm(stepper): void {
     this._stepperService.resetForm(stepper);
   }
 
   // <--------------- UI --------------->
 
-  public openSnackBar() {
+  public openSnackBar(): void {
     this.isQuerySuccess.subscribe(
       this.snackBar.open('User ' + this.fNameControl.value + ' successfully added!', 'OK!', {
         duration: 1700
       })
     );
-    // this.snackBar.open('User was not added', ':(', {
-    //   duration: 1700
-    // });
   }
 
-  public userInfClick(user) {
-    console.log('user', user);
+  public userInfClick(user): void {
     this._router.navigate(['stepper/' + user.id + '/edit']);
     this._stepperService.userInfo = user;
   }

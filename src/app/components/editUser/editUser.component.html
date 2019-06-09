@@ -7,10 +7,12 @@
       <div class="name" formGroupName="name">
         <mat-form-field>
           <input matInput placeholder="First name" formControlName="firstName">
+          <mat-error *ngIf="fNameControl.invalid || fNameControl.touched">You must enter a value</mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <input matInput placeholder="Last name" formControlName="lastName">
+          <mat-error *ngIf="lNameControl.invalid || lNameControl.touched">You must enter a value</mat-error>
         </mat-form-field>
       </div>
 
@@ -19,9 +21,13 @@
       <!--</mat-form-field>-->
 
       <mat-form-field>
-        <input matInput [matDatepicker]="dp" [max]="date" placeholder="Birthday" formControlName="birthday" name="birthday">
+        <input matInput
+               [matDatepicker]="dp"
+               [max]="date"
+               placeholder="Birthday" formControlName="birthday" name="birthday">
         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker #dp></mat-datepicker>
+        <mat-error *ngIf="birthdayControl.invalid || birthdayControl.touched">You must enter a value</mat-error>
       </mat-form-field>
 
       <!--<mat-form-field>-->
@@ -30,22 +36,29 @@
 
       <mat-form-field>
         <input matInput placeholder="Phone: +7(___)___-____" formControlName="phone" mask="+7(000)000-0000">
+        <mat-error *ngIf="phoneControl.invalid || phoneControl.touched">You must enter a value</mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <input matInput placeholder="Email" formControlName="email">
+        <mat-error *ngIf="emailControl.invalid || emailControl.touched">You must enter a value</mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <input matInput placeholder="Social Networks" formControlName="socNetworks">
+        <mat-error *ngIf="socNetworksControl.invalid || socNetworksControl.touched">You must enter a value</mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <input matInput placeholder="Password" formControlName="password">
+        <mat-error *ngIf="passwordControl.invalid || passwordControl.touched">You must enter a value</mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <input matInput placeholder="Confirm password" formControlName="confirmPassword">
+        <mat-error *ngIf="confirmPasswordControl.invalid || confirmPasswordControl.touched">
+          You must enter a value
+        </mat-error>
       </mat-form-field>
 
       <div class="mat-form-buttons">
